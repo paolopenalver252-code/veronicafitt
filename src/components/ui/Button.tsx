@@ -10,7 +10,7 @@ const base =
   "active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<ButtonVariant, string> = {
-  primary: "bg-cobalto text-white hover:bg-cobalto-hover",
+  primary: "bg-acento text-white hover:bg-acento-hover",
   secondary: "border-[1.5px] border-grafito text-grafito hover:bg-grafito hover:text-tiza",
   inverse: "bg-tiza text-grafito hover:bg-white",
   "inverse-outline": "border-[1.5px] border-tiza/70 text-tiza hover:border-tiza hover:bg-tiza hover:text-grafito",
@@ -75,9 +75,9 @@ export function ButtonLink({
 /** Enlace de texto con subrayado que se desplaza. Para CTAs contextuales. */
 export function textLinkClasses(className?: string) {
   return cn(
-    "inline-flex items-center gap-1.5 font-semibold text-cobalto underline decoration-[1.5px] underline-offset-[0.3em] " +
-      "decoration-cobalto/35 transition-[text-decoration-color,text-underline-offset] duration-(--duration-ui) " +
-      "hover:decoration-cobalto hover:underline-offset-[0.2em]",
+    "inline-flex items-center gap-1.5 font-semibold text-acento underline decoration-[1.5px] underline-offset-[0.3em] " +
+      "decoration-acento/35 transition-[text-decoration-color,text-underline-offset] duration-(--duration-ui) " +
+      "hover:decoration-acento hover:underline-offset-[0.2em]",
     className,
   );
 }

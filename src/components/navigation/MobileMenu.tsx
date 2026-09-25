@@ -40,7 +40,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
                 <AnchorLink
                   anchor={item.anchor}
                   onClick={onClose}
-                  className="font-heading flex min-h-16 items-center text-[1.875rem] [--wdth:80]"
+                  className="font-heading flex min-h-16 items-center text-[1.875rem]"
                 >
                   {item.label}
                 </AnchorLink>

@@ -26,6 +26,12 @@ Plan completo: [docs/PLAN-FASE-1.md](docs/PLAN-FASE-1.md).
 
 Los datos no confirmados se escriben con `pending("qué falta")`: nunca se inventan.
 
+## Vista de cliente y notas internas
+
+- **Por defecto** la web se ve como la verá Verónica: sin notas internas y con huecos de imagen tonales y limpios.
+- **`?notas=1`** en la URL muestra las notas internas (qué falta confirmar y qué foto va en cada hueco). Se recuerda en ese navegador; `?notas=0` o el botón "Ocultar notas internas" las quita.
+- **`?paleta=cobalto`** cambia el color de acento para compararlo con el granate; `?paleta=granate` vuelve al original.
+
 ## Variables de entorno
 
 Ver `.env.example`. `VITE_SITE_URL` (dominio, pendiente) activa canonical, `og:url`, `og:image` y `sitemap.xml`.

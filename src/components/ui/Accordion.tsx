@@ -1,13 +1,12 @@
-import { Plus } from "lucide-react";
 import { useId, useState, type ReactNode } from "react";
 import { cn } from "~/lib/cn";
 
 export type AccordionItem = { id: string; title: string; content: ReactNode };
 
 /**
- * Acordeón accesible (patrón WAI-ARIA): botón con aria-expanded que controla
- * una región. La altura se anima solo con CSS (grid-template-rows 0fr → 1fr)
- * y el contenido cerrado queda fuera del orden de tabulación y del lector.
+ * Acordeón accesible (patrón WAI-ARIA), solo con filetes: pregunta y línea.
+ * La altura se anima con CSS (grid-template-rows 0fr → 1fr) y el contenido
+ * cerrado queda fuera del orden de tabulación y del lector de pantalla.
  */
 export function Accordion({ items, headingLevel = 3 }: { items: AccordionItem[]; headingLevel?: 2 | 3 }) {
   const [open, setOpen] = useState<string | null>(null);
@@ -29,17 +28,25 @@ export function Accordion({ items, headingLevel = 3 }: { items: AccordionItem[];
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpen(isOpen ? null : item.id)}
-                className="group flex min-h-16 w-full items-center justify-between gap-6 py-5 text-left text-[1.125rem] font-semibold lg:text-[1.25rem]"
+                className="group flex min-h-18 w-full items-center justify-between gap-8 py-6 text-left"
               >
-                <span className="text-pretty">{item.title}</span>
                 <span
-                  aria-hidden
                   className={cn(
-                    "flex size-9 shrink-0 items-center justify-center rounded-full border transition-[rotate,background-color,border-color,color] duration-300 ease-(--ease-out-soft)",
-                    isOpen ? "rotate-45 border-cobalto bg-cobalto text-white" : "border-linea group-hover:border-grafito",
+                    "font-heading text-[1.3125rem] leading-snug text-pretty transition-colors duration-300 lg:text-[1.5rem]",
+                    isOpen ? "text-acento" : "group-hover:text-acento",
                   )}
                 >
-                  <Plus className="size-4" strokeWidth={2.25} />
+                  {item.title}
+                </span>
+                {/* Más que se convierte en menos */}
+                <span aria-hidden className="relative size-4 shrink-0">
+                  <span className="absolute top-1/2 left-0 h-px w-4 bg-current" />
+                  <span
+                    className={cn(
+                      "absolute top-0 left-1/2 h-4 w-px bg-current transition-transform duration-500 ease-(--ease-out-soft)",
+                      isOpen && "scale-y-0",
+                    )}
+                  />
                 </span>
               </button>
             </Heading>
@@ -49,12 +56,12 @@ export function Accordion({ items, headingLevel = 3 }: { items: AccordionItem[];
               aria-labelledby={buttonId}
               inert={!isOpen}
               className={cn(
-                "grid transition-[grid-template-rows,visibility] duration-300 ease-(--ease-out-soft)",
+                "grid transition-[grid-template-rows,visibility] duration-500 ease-(--ease-out-soft)",
                 isOpen ? "visible grid-rows-[1fr]" : "invisible grid-rows-[0fr]",
               )}
             >
               <div className="overflow-hidden">
-                <div className="max-w-[42rem] pr-12 pb-6 text-piedra">{item.content}</div>
+                <div className="max-w-[40rem] pr-10 pb-8 text-piedra">{item.content}</div>
               </div>
             </div>
           </div>

@@ -45,13 +45,13 @@ export function WorkoutCatalog() {
     <>
       <section aria-labelledby="categorias-title" className="container-site pt-20 lg:pt-28">
         <div className="flex items-center gap-3">
-          <h2 id="categorias-title" className="font-heading text-h2">
+          <h2 id="categorias-title" className="font-display text-h2">
             Categorías
           </h2>
-          <StatusTag tone="example">Ejemplo</StatusTag>
+          <StatusTag tone="example" className="dev-only">Ejemplo</StatusTag>
         </div>
-        <ul className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
-          {categories.map((c) => {
+        <ul className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4 lg:gap-x-8">
+          {categories.map((c, i) => {
             const selected = category === c.id;
             return (
               <li key={c.id}>
@@ -63,14 +63,14 @@ export function WorkoutCatalog() {
                 >
                   <span
                     className={cn(
-                      "relative block aspect-[16/10] overflow-hidden rounded-card outline-2 outline-offset-2 transition-[outline-color]",
-                      selected ? "outline-cobalto" : "outline-transparent",
+                      "relative block aspect-[4/5] overflow-hidden outline-2 outline-offset-4 transition-[outline-color]",
+                      selected ? "outline-acento" : "outline-transparent",
                     )}
                   >
-                    <Media slot={c.media} compact sizes="(min-width: 1024px) 25vw, 50vw" />
+                    <Media slot={c.media} tone={i % 2 ? "light" : "deep"} sizes="(min-width: 1024px) 25vw, 50vw" />
                   </span>
-                  <span className="mt-3 block font-semibold transition-colors group-hover:text-cobalto">{c.name}</span>
-                  <span className="block text-small text-piedra">{c.description}</span>
+                  <span className="font-heading mt-4 block text-[1.5rem] leading-tight transition-colors group-hover:text-acento">{c.name}</span>
+                  <span className="mt-1 block text-small text-piedra">{c.description}</span>
                 </button>
               </li>
             );
@@ -80,10 +80,10 @@ export function WorkoutCatalog() {
 
       <section aria-labelledby="entrenos-title" className="container-site pt-20 lg:pt-28">
         <div className="flex items-center gap-3">
-          <h2 id="entrenos-title" className="font-heading text-h2">
+          <h2 id="entrenos-title" className="font-display text-h2">
             Entrenamientos
           </h2>
-          <StatusTag tone="example">Ejemplo</StatusTag>
+          <StatusTag tone="example" className="dev-only">Ejemplo</StatusTag>
         </div>
 
         <div className="mt-8 flex flex-col gap-5 border-y border-linea py-6 lg:flex-row lg:gap-10">
@@ -116,14 +116,14 @@ export function WorkoutCatalog() {
             <p className="font-semibold">No hay entrenamientos con esos filtros.</p>
             <button
               type="button"
-              className="mt-3 min-h-11 font-semibold text-cobalto underline underline-offset-4"
+              className="mt-3 min-h-11 font-semibold text-acento underline underline-offset-4"
               onClick={() => setParams(new URLSearchParams(), { replace: true, preventScrollReset: true })}
             >
               Quitar filtros
             </button>
           </div>
         ) : (
-          <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          <ul className="mt-10 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">
             <AnimatePresence mode="popLayout" initial={false}>
               {results.map((w, i) => (
                 <m.li
@@ -132,7 +132,7 @@ export function WorkoutCatalog() {
                   animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: easeOutSoft, delay: i * 0.03 } }}
                   exit={{ opacity: 0, transition: { duration: 0.15 } }}
                 >
-                  <WorkoutCard workout={w} />
+                  <WorkoutCard workout={w} tone={i % 2 ? "light" : "deep"} />
                 </m.li>
               ))}
             </AnimatePresence>
@@ -168,7 +168,7 @@ function FilterGroup({
               aria-pressed={active}
               onClick={() => onChange(o.id)}
               className={cn(
-                "min-h-10 rounded-full border px-4 text-small font-medium transition-colors",
+                "min-h-11 rounded-full border px-4 text-small font-medium transition-colors",
                 active ? "border-grafito bg-grafito text-tiza" : "border-linea bg-blanco hover:border-grafito",
               )}
             >

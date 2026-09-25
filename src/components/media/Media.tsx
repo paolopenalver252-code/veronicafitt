@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "~/lib/cn";
 import { isPending, resolved } from "~/lib/pending";
 import type { MediaSlot } from "~/types/content";
-import { MediaPlaceholder } from "./MediaPlaceholder";
+import { MediaPlaceholder, type PlaceholderTone } from "./MediaPlaceholder";
 import { useAutoplayAllowed } from "./useAutoplayAllowed";
 
 type MediaProps = {
@@ -10,17 +10,16 @@ type MediaProps = {
   /** Solo para contenido crítico: carga inmediata y prioritaria. */
   priority?: boolean;
   sizes?: string;
-  tone?: "light" | "dark";
-  /** Huecos pequeños o con etiquetas encima: el marcador muestra solo el icono. */
-  compact?: boolean;
+  /** Tono del hueco mientras falta el asset real. */
+  tone?: PlaceholderTone;
   className?: string;
 };
 
 const fill = "absolute inset-0 h-full w-full object-cover";
 
 /** Rellena su contenedor (que fija la proporción): imagen, vídeo o hueco pendiente. */
-export function Media({ slot, priority = false, sizes = "100vw", tone, compact, className }: MediaProps) {
-  if (isPending(slot.src)) return <MediaPlaceholder slot={slot} tone={tone} compact={compact} className={className} />;
+export function Media({ slot, priority = false, sizes = "100vw", tone, className }: MediaProps) {
+  if (isPending(slot.src)) return <MediaPlaceholder slot={slot} tone={tone} className={className} />;
   if (slot.kind === "video") return <LazyVideo slot={slot} priority={priority} className={className} />;
   return <Picture slot={slot} priority={priority} sizes={sizes} className={className} />;
 }

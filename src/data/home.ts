@@ -11,18 +11,19 @@ import type { FAQItem, PricingPlan, ProcessStep, Service, Testimonial } from "~/
  */
 
 export const hero = {
-  kicker: "Verónica Calabuch, entrenadora personal",
+  name: "Verónica Calabuch",
+  role: "Entrenadora personal",
   headline: ["Empieza", "desde donde", "estás."],
   subtitle:
-    "Entrenamiento personal, fuerza funcional y grupos reducidos en mi propia sala. Adaptado a tu nivel y a tu ritmo, también si nunca has entrenado.",
+    "Entrenamiento personal, fuerza funcional y grupos reducidos en mi propia sala. Tu nivel es el punto de partida, no un requisito.",
   primaryCta: "Escríbeme",
-  secondaryCta: { label: "Ver cómo trabajo", anchor: "como-trabajo" },
+  secondaryCta: { label: "Cómo trabajo", anchor: "como-trabajo" },
 };
 
 export const manifesto = {
-  lines: ["45 metros cuadrados.", "Pocas personas.", "Toda la atención."],
-  body: "Aquí no hay rutinas copiadas ni prisa. Cada sesión parte de cómo llegas: tu nivel, tu ritmo y cualquier lesión o limitación que haya que tener en cuenta.",
-  forWhomTitle: "Esto es para ti si…",
+  statement: "El entrenamiento se adapta a ti. No al revés.",
+  body: "Cada persona llega con un nivel, un ritmo y una historia distintos. Por eso no hay rutinas copiadas: cada sesión parte de cómo llegas y tiene en cuenta cualquier lesión o limitación.",
+  forWhomTitle: "Para ti, si…",
   forWhom: [
     "Nunca has entrenado o hace tiempo que lo dejaste.",
     "Los gimnasios grandes te imponen o te pierdes en ellos.",
@@ -34,21 +35,20 @@ export const manifesto = {
 
 export const about = {
   title: "Verónica Calabuch",
-  lead: "Soy entrenadora personal y monitora de fitness. Trabajo el entrenamiento personal y la fuerza funcional, en sesiones individuales y en grupos reducidos, en mi propia sala.",
+  lead: "Entrenadora personal y monitora de fitness. Trabajo el entrenamiento personal y la fuerza funcional, en sesiones individuales y en grupos reducidos, en mi propia sala.",
   body: [
-    "Entiendo el entrenamiento de una forma sencilla: cada persona llega con un nivel, un ritmo y una historia distintos, y es el entrenamiento el que tiene que adaptarse a eso, no al revés.",
-    "Por eso tengo en cuenta tus posibles lesiones o limitaciones, y por eso no necesitas experiencia previa para empezar conmigo.",
+    "Creo en un entrenamiento que se adapta a la persona: a su nivel, a su ritmo y a lo que su cuerpo necesita. Tengo en cuenta tus lesiones o limitaciones, y no hace falta experiencia para empezar conmigo.",
   ],
   principles: [
-    { title: "Tu nivel", body: "Es el punto de partida, no un requisito." },
+    { title: "Tu nivel", body: "El punto de partida." },
     { title: "Tu ritmo", body: "Marca cómo avanzamos." },
-    { title: "Tu cuerpo", body: "Las lesiones y limitaciones se tienen en cuenta." },
+    { title: "Tu cuerpo", body: "Siempre en cuenta." },
   ],
   copyNote: pending("Texto provisional redactado a partir del brief: validar con Verónica y ajustar a su voz"),
   storyNote: pending("Historia personal: por qué se dedica al entrenamiento (con sus palabras)"),
   credentialsNote: pending("Formación, titulaciones y años de experiencia"),
   quote: pending("Una frase de Verónica que la represente"),
-  cta: { label: "Ver cómo trabajo", anchor: "como-trabajo" },
+  cta: { label: "Cómo trabajo", anchor: "como-trabajo" },
 };
 
 export const services: Service[] = [
@@ -56,7 +56,7 @@ export const services: Service[] = [
     id: "personal",
     title: "Entrenamiento personal",
     summary:
-      "Sesiones individuales con toda la atención puesta en ti. Cada ejercicio se adapta a tu nivel, a tu ritmo y a cualquier limitación que haya que tener en cuenta.",
+      "Sesiones individuales con toda la atención puesta en ti. Cada ejercicio se adapta a tu nivel, a tu ritmo y a cualquier limitación.",
     forWhom: "Para empezar con seguridad o avanzar con un plan hecho a tu medida.",
     media: media.personal,
     status: "available",
@@ -67,7 +67,7 @@ export const services: Service[] = [
     id: "funcional",
     title: "Fuerza funcional",
     summary:
-      "Trabajo de fuerza basado en movimientos completos del cuerpo. Fuerza útil para tu día a día, construida desde tu punto de partida.",
+      "Fuerza construida con movimientos completos del cuerpo. Útil para tu día a día y adaptada a tu punto de partida.",
     forWhom: "Para ganar fuerza y control, tengas o no experiencia con pesos.",
     media: media.funcional,
     status: "available",
@@ -78,7 +78,7 @@ export const services: Service[] = [
     id: "grupos",
     title: "Grupos reducidos",
     summary:
-      "Entrena en compañía sin perder la atención personal. Grupos pequeños en los que cada persona trabaja a su nivel.",
+      "Entrena en compañía sin perder la atención personal. Grupos pequeños donde cada persona trabaja a su nivel.",
     forWhom: "Para quien disfruta entrenando con otras personas y quiere seguir teniendo corrección.",
     media: media.grupos,
     status: "available",
@@ -89,7 +89,7 @@ export const services: Service[] = [
     id: "online",
     title: "Entrenamiento online",
     summary:
-      "Entrenamientos grabados de unos 45 minutos, organizados en packs, para entrenar desde casa cuando te venga bien.",
+      "La misma forma de entrenar, desde casa. Sesiones grabadas de unos 45 minutos, organizadas en packs.",
     forWhom: "Para quien tiene poco tiempo, prefiere no ir al gimnasio o vive lejos.",
     media: media.online,
     status: "coming-soon",
@@ -99,7 +99,7 @@ export const services: Service[] = [
 
 export const process = {
   title: "Cómo trabajo",
-  intro: "Un proceso sencillo, pensado para que dar el primer paso sea fácil.",
+  intro: "Cuatro pasos sencillos, pensados para que empezar sea fácil.",
   steps: [
     {
       title: "Primer contacto",
@@ -125,7 +125,9 @@ export const process = {
 
 export const studio = {
   title: "La sala",
-  lead: "Un espacio propio de unos 45 m² donde se entrena en sesiones individuales y en grupos reducidos. Pequeño, para que nadie se pierda entre la gente.",
+  size: "45",
+  lines: ["Pocas personas.", "Toda la atención."],
+  lead: "Una sala propia y tranquila, de unos 45 metros cuadrados, donde se entrena en sesiones individuales y en grupos reducidos. Aquí nadie se pierde entre la gente.",
   facts: [
     { label: "Superficie", value: "Aprox. 45 m²" },
     { label: "Formato", value: "Individual y grupos reducidos" },
@@ -138,7 +140,7 @@ export const studio = {
 export const pricing = {
   title: "Tarifas",
   intro:
-    "Quiero que sepas lo que cuesta antes de empezar. Estoy cerrando las tarifas; mientras tanto, escríbeme y te cuento las opciones.",
+    "Estoy terminando de definir las tarifas. Si quieres conocerlas ya, escríbeme y te cuento las opciones.",
   plans: [
     {
       id: "personal",
@@ -229,6 +231,6 @@ export const faq: FAQItem[] = [
 ];
 
 export const closing = {
-  title: "Cuéntame desde dónde partes.",
-  body: "Escríbeme y vemos qué tipo de entrenamiento encaja contigo. Te responderé personalmente.",
+  title: "Tu punto de partida es suficiente.",
+  body: "Cuéntame desde dónde empiezas y vemos qué entrenamiento encaja contigo. Te responderé personalmente.",
 };

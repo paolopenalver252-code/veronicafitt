@@ -52,7 +52,7 @@ export function Navbar({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOp
         <div className="container-site flex h-full items-center justify-between gap-6">
           <Link
             to="/"
-            className="font-heading text-[1.125rem] leading-none [--wdth:80] xs:text-[1.25rem] lg:text-[1.375rem]"
+            className="font-heading text-[1.125rem] leading-none xs:text-[1.25rem] lg:text-[1.375rem]"
             aria-label={`${site.name}, inicio`}
           >
             {site.name}

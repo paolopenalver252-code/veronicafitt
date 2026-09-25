@@ -63,7 +63,7 @@ export function WaitlistForm({ tone = "light", className }: { tone?: "light" | "
           )}
           placeholder="nombre@email.com"
         />
-        <Button type="submit" disabled={sending}>
+        <Button type="submit" variant={dark ? "inverse" : "primary"} disabled={sending}>
           Apuntarme
         </Button>
       </div>
@@ -81,7 +81,7 @@ export function WaitlistForm({ tone = "light", className }: { tone?: "light" | "
           onChange={(e) => setConsent(e.target.checked)}
           aria-invalid={Boolean(errors.consent)}
           aria-describedby={errors.consent ? `${id}-consent-error` : undefined}
-          className="mt-0.5 size-5 shrink-0 accent-cobalto"
+          className="mt-0.5 size-5 shrink-0 accent-acento"
         />
         <label htmlFor={`${id}-consent`} className={cn("text-small", dark ? "text-tiza/75" : "text-piedra")}>
           Acepto recibir un aviso cuando estén disponibles los entrenamientos online, según la{" "}

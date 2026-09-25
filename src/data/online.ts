@@ -11,8 +11,9 @@ import type { Level, Pack, Workout, WorkoutCategory } from "~/types/content";
 
 export const onlineIntro = {
   status: "En preparación",
-  title: "Entrena conmigo desde casa.",
-  body: "Estoy preparando entrenamientos grabados de unos 45 minutos, organizados en packs, para que puedas entrenar donde y cuando quieras, estés donde estés.",
+  title: "Entrena donde quieras.",
+  subtitle: ["La misma forma de entrenar.", "Ahora, estés donde estés."],
+  body: "Estoy preparando entrenamientos grabados de unos 45 minutos, organizados en packs, para que puedas entrenar desde casa, a tu ritmo y cuando te venga bien.",
   audience: ["Si tienes poco tiempo", "Si prefieres no ir al gimnasio", "Si buscas flexibilidad"],
   launchNote: pending("Fecha aproximada de lanzamiento del online"),
   formatNote: pending("Formato de acceso, precios y si habrá pago único o suscripción"),

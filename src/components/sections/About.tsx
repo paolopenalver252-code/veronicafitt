@@ -1,65 +1,68 @@
 import { Media } from "~/components/media/Media";
-import { ImageReveal } from "~/components/motion/Reveal";
+import { FadeIn, ImageReveal } from "~/components/motion/Reveal";
 import { textLinkClasses } from "~/components/ui/Button";
-import { PendingNote } from "~/components/ui/Pending";
-import { SectionHeading } from "~/components/ui/SectionHeading";
+import { DevNote } from "~/components/ui/Pending";
 import { about } from "~/data/home";
 import { media } from "~/data/media";
 import { isPending } from "~/lib/pending";
 
+/** Imagen grande, relato corto y aire. La foto de Verónica manda. */
 export function About() {
   return (
-    <section id="sobre-mi" aria-labelledby="sobre-mi-title" className="section-y">
-      <div className="container-site grid gap-12 lg:grid-cols-12 lg:gap-10">
-        <div className="relative lg:col-span-5 lg:self-start">
-          <ImageReveal className="relative aspect-[4/5] overflow-hidden rounded-media">
-            <Media slot={media.about} sizes="(min-width: 1024px) 40vw, 100vw" />
-          </ImageReveal>
-          <ImageReveal
-            delay={0.25}
-            className="relative -mt-16 ml-auto aspect-[4/5] w-[46%] overflow-hidden rounded-media border-8 border-tiza lg:absolute lg:-right-16 lg:-bottom-20 lg:mt-0 lg:w-[44%]"
-          >
-            <Media slot={media.aboutDetail} compact sizes="(min-width: 1024px) 18vw, 46vw" />
+    <section id="sobre-mi" aria-labelledby="sobre-mi-title" className="section-y bg-tiza-deep/60">
+      <div className="lg:container-site lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
+        <div className="relative lg:col-span-6">
+          <ImageReveal className="aspect-[4/5] lg:aspect-[5/6]">
+            <Media slot={media.about} tone="deep" sizes="(min-width: 1024px) 55vw, 100vw" />
           </ImageReveal>
         </div>
 
-        <div className="lg:col-span-6 lg:col-start-7 lg:pt-8">
-          <SectionHeading id="sobre-mi-title" label="Sobre mí" title={about.title} />
-          <p className="mt-6 max-w-[36rem] text-lead text-pretty">{about.lead}</p>
-          <div className="mt-5 flex max-w-[36rem] flex-col gap-4 text-piedra">
+        <div className="px-5 pt-14 md:px-10 lg:col-span-5 lg:col-start-8 lg:px-0 lg:pt-0">
+          <FadeIn>
+            <p className="label text-acento">Sobre mí</p>
+            <h2 id="sobre-mi-title" className="font-display mt-5 text-h2">
+              {about.title}
+            </h2>
+            <p className="mt-8 text-lead text-pretty">{about.lead}</p>
             {about.body.map((p) => (
-              <p key={p} className="text-pretty">
+              <p key={p} className="mt-5 text-pretty text-piedra">
                 {p}
               </p>
             ))}
-          </div>
+          </FadeIn>
 
-          <div className="mt-6 flex flex-col items-start gap-2">
-            <PendingNote value={about.copyNote} />
-            <PendingNote value={about.storyNote} />
-            <PendingNote value={about.credentialsNote} />
-          </div>
+          <FadeIn delay={0.1}>
+            <dl className="mt-12 grid grid-cols-3 border-t border-linea">
+              {about.principles.map((p) => (
+                <div key={p.title} className="border-r border-linea py-5 pr-3 pl-3 first:pl-0 last:border-r-0">
+                  <dt className="font-heading text-[1.375rem] leading-tight">{p.title}</dt>
+                  <dd className="mt-1.5 text-small text-piedra">{p.body}</dd>
+                </div>
+              ))}
+            </dl>
+          </FadeIn>
 
-          <dl className="mt-10 grid gap-px overflow-hidden rounded-card border border-linea bg-linea sm:grid-cols-3">
-            {about.principles.map((p) => (
-              <div key={p.title} className="bg-tiza p-5">
-                <dt className="font-heading text-h3">{p.title}</dt>
-                <dd className="mt-2 text-small text-piedra">{p.body}</dd>
-              </div>
-            ))}
-          </dl>
-
-          {isPending(about.quote) ? (
-            <PendingNote value={about.quote} className="mt-8" />
-          ) : (
-            <blockquote className="mt-10 border-l-2 border-cobalto pl-5 text-lead">{about.quote}</blockquote>
+          {!isPending(about.quote) && (
+            <blockquote className="font-heading mt-12 text-h3 text-pretty">“{about.quote}”</blockquote>
           )}
 
-          <div className="mt-10">
+          <div className="dev-only mt-10 flex flex-col items-start gap-2">
+            <DevNote value={about.copyNote} />
+            <DevNote value={about.storyNote} />
+            <DevNote value={about.credentialsNote} />
+            <DevNote value={about.quote} />
+          </div>
+
+          <div className="mt-8">
             <a href={`#${about.cta.anchor}`} className={textLinkClasses("min-h-11")}>
               {about.cta.label}
             </a>
           </div>
+
+          {/* Detalle visual: segunda foto pequeña, como en una página de revista. */}
+          <ImageReveal delay={0.2} className="mt-14 aspect-[4/5] w-1/2 lg:w-2/5">
+            <Media slot={media.aboutDetail} tone="soft" sizes="(min-width: 1024px) 15vw, 50vw" />
+          </ImageReveal>
         </div>
       </div>
     </section>

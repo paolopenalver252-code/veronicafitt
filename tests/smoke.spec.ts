@@ -14,7 +14,7 @@ test.describe("Home", () => {
     const errors = collectErrors(page);
     await page.goto("/");
     await expect(page.locator("h1")).toHaveCount(1);
-    await expect(page.locator("h1")).toContainText("entrenadora personal");
+    await expect(page.locator("h1")).toContainText(/entrenadora personal/i);
     for (const id of ["inicio", "manifiesto", "sobre-mi", "entrenamientos", "como-trabajo", "sala", "online", "tarifas", "preguntas", "contacto"]) {
       await expect(page.locator(`#${id}`)).toHaveCount(1);
     }
@@ -135,11 +135,25 @@ test("rutas legales y 404", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Esta página no existe.");
 });
 
-test("modo revisión oculta las notas internas", async ({ page }) => {
-  await page.goto("/#tarifas");
-  const note = page.getByText("Pendiente de confirmar:").first();
-  await expect(note).toBeVisible();
-  await page.locator("footer").getByRole("button", { name: /Notas de revisión/ }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-review", "off");
-  await expect(page.locator(".review-only").first()).toBeHidden();
+test("vista de cliente sin notas internas; ?notas=1 las muestra", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByText("Pendiente de confirmar:").first()).toBeHidden();
+  await expect(page.getByText(/Foto pendiente|Vídeo pendiente/).first()).toBeHidden();
+  await expect(page.getByRole("button", { name: "Ocultar notas internas" })).toHaveCount(0);
+
+  await page.goto("/?notas=1#tarifas");
+  await expect(page.locator("html")).toHaveAttribute("data-notes", "on");
+  await expect(page.locator("#tarifas").getByText("Pendiente de confirmar:").first()).toBeVisible();
+
+  await page.getByRole("button", { name: "Ocultar notas internas" }).click();
+  await expect(page.locator("html")).not.toHaveAttribute("data-notes", "on");
+  await page.goto("/");
+  await expect(page.getByText("Pendiente de confirmar:").first()).toBeHidden();
+});
+
+test("paleta alternativa para comparar", async ({ page }) => {
+  await page.goto("/?paleta=cobalto");
+  await expect(page.locator("html")).toHaveAttribute("data-palette", "cobalto");
+  await page.goto("/?paleta=granate");
+  await expect(page.locator("html")).not.toHaveAttribute("data-palette", /.+/);
 });

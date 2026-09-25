@@ -1,135 +1,100 @@
-import { AnimatePresence, m } from "motion/react";
-import { useState } from "react";
 import { ContactCta } from "~/components/contact/ContactIntent";
 import { Media } from "~/components/media/Media";
-import { easeOutSoft } from "~/components/motion/MotionProvider";
+import type { PlaceholderTone } from "~/components/media/MediaPlaceholder";
+import { FadeIn, ImageReveal } from "~/components/motion/Reveal";
 import { textLinkClasses } from "~/components/ui/Button";
-import { PendingNote } from "~/components/ui/Pending";
-import { SectionHeading } from "~/components/ui/SectionHeading";
+import { DevNote } from "~/components/ui/Pending";
 import { StatusTag } from "~/components/ui/StatusTag";
 import { services } from "~/data/home";
 import { cn } from "~/lib/cn";
 import type { Service } from "~/types/content";
 
-/**
- * Escritorio: lista editorial; al pasar el ratón o enfocar un servicio, su
- * imagen aparece en el marco fijo de la derecha. Móvil: cada servicio lleva
- * su imagen en línea (no hay hover en pantallas táctiles).
- */
+/** Composición de cada servicio presencial: alterna lado, proporción y tono para crear ritmo. */
+const layouts: Array<{ tag: string; aspect: string; tone: PlaceholderTone }> = [
+  { tag: "Uno a uno", aspect: "aspect-[4/5]", tone: "deep" },
+  { tag: "Fuerza", aspect: "aspect-[4/5] lg:aspect-[3/4]", tone: "light" },
+  { tag: "En grupo", aspect: "aspect-[4/5] sm:aspect-[3/2]", tone: "deep" },
+];
+
 export function Services() {
-  const [active, setActive] = useState(0);
-  const current = services[active];
+  const presencial = services.filter((s) => s.status !== "coming-soon");
+  const online = services.find((s) => s.status === "coming-soon");
 
   return (
     <section id="entrenamientos" aria-labelledby="entrenamientos-title" className="section-y">
       <div className="container-site">
-        <SectionHeading
-          id="entrenamientos-title"
-          label="Entrenamientos"
-          title="Cómo puedes entrenar conmigo"
-          intro="Siempre con la misma idea: el entrenamiento se adapta a ti."
-        />
-
-        <div className="mt-14 grid lg:mt-20 lg:grid-cols-12 lg:gap-10">
-          <ul className="border-t border-linea lg:col-span-7">
-            {services.map((service, i) => (
-              <ServiceRow
-                key={service.id}
-                service={service}
-                active={i === active}
-                onActivate={() => setActive(i)}
-              />
-            ))}
-          </ul>
-
-          <div aria-hidden className="hidden lg:col-span-5 lg:block">
-            <div className="sticky top-[calc(var(--nav-h)+2rem)] aspect-[4/5] overflow-hidden rounded-media bg-tiza-deep">
-              <AnimatePresence initial={false}>
-                <m.div
-                  key={current.id}
-                  className="absolute inset-0"
-                  initial={{ opacity: 0, scale: 1.03 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, ease: easeOutSoft }}
-                >
-                  <Media slot={current.media} sizes="40vw" />
-                </m.div>
-              </AnimatePresence>
-              {current.status === "coming-soon" && (
-                <StatusTag tone="soon" className="absolute top-4 right-4">
-                  Próximamente
-                </StatusTag>
-              )}
-            </div>
-          </div>
-        </div>
+        <p className="label text-acento">Entrenamientos</p>
+        <h2 id="entrenamientos-title" className="font-display mt-5 max-w-[16ch] text-h2 text-balance">
+          Cómo puedes entrenar conmigo
+        </h2>
       </div>
+
+      <div className="mt-16 flex flex-col gap-24 lg:mt-28 lg:gap-40">
+        {presencial.map((service, i) => (
+          <ServiceRow key={service.id} service={service} index={i} />
+        ))}
+      </div>
+
+      {online && (
+        <div className="container-site mt-24 lg:mt-40">
+          <FadeIn className="flex flex-col gap-6 border-y border-linea py-10 md:flex-row md:items-center md:justify-between">
+            <div>
+              <div className="flex flex-wrap items-center gap-3">
+                <h3 className="font-heading text-h3">{online.title}</h3>
+                <StatusTag tone="soon">Próximamente</StatusTag>
+              </div>
+              <p className="mt-3 max-w-[34rem] text-pretty text-piedra">{online.summary}</p>
+            </div>
+            <a href={online.cta.href} className={textLinkClasses("min-h-11 shrink-0")}>
+              {online.cta.label}
+            </a>
+          </FadeIn>
+        </div>
+      )}
     </section>
   );
 }
 
-function ServiceRow({ service, active, onActivate }: { service: Service; active: boolean; onActivate: () => void }) {
-  const comingSoon = service.status === "coming-soon";
+function ServiceRow({ service, index }: { service: Service; index: number }) {
+  const layout = layouts[index % layouts.length];
+  const reversed = index % 2 === 1;
+  const wide = index === 2;
 
   return (
-    <li
-      className="group relative border-b border-linea py-8 lg:py-10"
-      onMouseEnter={onActivate}
-      onFocus={onActivate}
-    >
-      {/* Indicador del servicio activo (solo escritorio) */}
-      <span
-        aria-hidden
+    <article className="lg:container-site lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
+      <ImageReveal
         className={cn(
-          "absolute top-0 left-0 hidden h-px bg-cobalto transition-[width] duration-500 ease-(--ease-out-soft) lg:block",
-          active ? "w-full" : "w-0",
+          layout.aspect,
+          "group",
+          wide ? "lg:col-span-8" : "lg:col-span-6",
+          reversed ? "lg:order-2 lg:col-start-7" : "lg:col-start-1",
         )}
-      />
+      >
+        <div className="absolute inset-0 transition-transform duration-[1.2s] ease-(--ease-out-soft) group-hover:scale-[1.03]">
+          <Media slot={service.media} tone={layout.tone} sizes="(min-width: 1024px) 50vw, 100vw" />
+        </div>
+      </ImageReveal>
 
-      <div className="relative mb-6 aspect-[4/5] overflow-hidden rounded-media bg-tiza-deep sm:aspect-[3/2] lg:hidden">
-        <Media slot={service.media} sizes="100vw" />
-        {comingSoon && (
-          <StatusTag tone="soon" className="absolute top-4 right-4">
-            Próximamente
-          </StatusTag>
+      <FadeIn
+        className={cn(
+          "px-5 pt-10 md:px-10 lg:px-0 lg:pt-0",
+          wide ? "lg:col-span-4" : "lg:col-span-5",
+          reversed ? "lg:order-1 lg:col-start-1" : wide ? "lg:col-start-9" : "lg:col-start-8",
         )}
-      </div>
-
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <h3
-          className={cn(
-            "font-heading text-[clamp(1.75rem,1.3rem+1.8vw,2.75rem)] leading-none transition-[color,translate] duration-300 ease-(--ease-out-soft)",
-            active && "lg:translate-x-2 lg:text-cobalto",
-          )}
-        >
-          {service.title}
-        </h3>
-        {comingSoon && (
-          <span className="hidden lg:inline-flex">
-            <StatusTag tone="soon">Próximamente</StatusTag>
-          </span>
-        )}
-      </div>
-
-      <p className="mt-4 max-w-[36rem] text-pretty">{service.summary}</p>
-      <p className="mt-2 max-w-[36rem] text-small text-pretty text-piedra">{service.forWhom}</p>
-
-      {service.notes?.map((note, i) => (
-        <PendingNote key={i} value={note} className="mt-4" />
-      ))}
-
-      <div className="mt-5">
-        {comingSoon ? (
-          <a href={service.cta.href} className={textLinkClasses("min-h-11")}>
-            {service.cta.label}
-          </a>
-        ) : (
+      >
+        <p className="label">{layout.tag}</p>
+        <h3 className="font-display mt-4 text-h2">{service.title}</h3>
+        <p className="mt-6 max-w-[30rem] text-lead text-pretty">{service.summary}</p>
+        <p className="mt-4 max-w-[30rem] text-pretty text-piedra">{service.forWhom}</p>
+        {service.notes?.map((note, i) => (
+          <DevNote key={i} value={note} className="mt-4" />
+        ))}
+        <div className="mt-8">
           <ContactCta service={service.id} variant="text" className={textLinkClasses("min-h-11")}>
             {service.cta.label}
           </ContactCta>
-        )}
-      </div>
-    </li>
+        </div>
+      </FadeIn>
+    </article>
   );
 }

@@ -1,7 +1,7 @@
 import { ContactCta } from "~/components/contact/ContactIntent";
 import { Accordion } from "~/components/ui/Accordion";
-import { PendingNote } from "~/components/ui/Pending";
-import { SectionHeading } from "~/components/ui/SectionHeading";
+import { textLinkClasses } from "~/components/ui/Button";
+import { DevNote } from "~/components/ui/Pending";
 import { faq } from "~/data/home";
 
 export function FAQ() {
@@ -11,22 +11,27 @@ export function FAQ() {
     content: (
       <>
         <p className="text-pretty">{item.answer}</p>
-        {item.note && <PendingNote value={item.note} className="mt-3" />}
+        {item.note && <DevNote value={item.note} className="mt-3" />}
       </>
     ),
   }));
 
   return (
     <section id="preguntas" aria-labelledby="preguntas-title" className="section-y">
-      <div className="container-site grid gap-10 lg:grid-cols-12">
+      <div className="container-site grid gap-12 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-4">
-          <SectionHeading id="preguntas-title" title="Preguntas frecuentes" />
-          <p className="mt-5 text-piedra">¿Tienes otra duda?</p>
-          <ContactCta variant="secondary" className="mt-4">
-            Pregúntame
-          </ContactCta>
+          <p className="label text-acento">Preguntas</p>
+          <h2 id="preguntas-title" className="font-display mt-5 text-h2">
+            Preguntas frecuentes
+          </h2>
+          <p className="mt-6 text-piedra">
+            ¿Tienes otra duda?{" "}
+            <ContactCta variant="text" className={textLinkClasses()}>
+              Pregúntame
+            </ContactCta>
+          </p>
         </div>
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-7 lg:col-start-6">
           <Accordion items={items} />
         </div>
       </div>

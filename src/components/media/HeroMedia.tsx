@@ -53,7 +53,7 @@ export function HeroMedia({ slot }: { slot: MediaSlot }) {
   const image = isVideo ? poster : src;
 
   // Sin asset todavía: hueco reservado con la proporción final.
-  if (!image && (isPending(slot.src) || !isVideo)) return <MediaPlaceholder slot={slot} />;
+  if (!image && (isPending(slot.src) || !isVideo)) return <MediaPlaceholder slot={slot} tone="deep" />;
 
   return (
     <>

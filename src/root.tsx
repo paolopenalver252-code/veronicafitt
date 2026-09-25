@@ -1,4 +1,5 @@
-import fontUrl from "../node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url";
+import serifUrl from "../node_modules/@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-opsz-normal.woff2?url";
+import sansUrl from "../node_modules/@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url";
 import { useState, type ReactNode } from "react";
 import {
   isRouteErrorResponse,
@@ -12,28 +13,30 @@ import {
 import type { Route } from "./+types/root";
 import { ContactIntentProvider } from "~/components/contact/ContactIntent";
 import { Footer } from "~/components/layout/Footer";
-import { ReviewToggle, reviewModeScript } from "~/components/layout/ReviewToggle";
+import { DevNotesBadge, devScript } from "~/components/layout/DevNotes";
 import { MotionProvider } from "~/components/motion/MotionProvider";
 import { MobileCTABar } from "~/components/navigation/MobileCTABar";
 import { Navbar } from "~/components/navigation/Navbar";
 import { buttonClasses } from "~/components/ui/Button";
+import { site } from "~/data/site";
 import "./styles/app.css";
 
 export const links: LinksFunction = () => [
-  { rel: "preload", href: fontUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+  { rel: "preload", href: serifUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+  { rel: "preload", href: sansUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
   { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
 ];
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang="es" data-review="on">
+    <html lang="es">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#f1f1ee" />
         <Meta />
         <Links />
-        <script dangerouslySetInnerHTML={{ __html: reviewModeScript }} />
+        {site.demo && <script dangerouslySetInnerHTML={{ __html: devScript }} />}
         <noscript>
           <style>{`[data-motion]{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
         </noscript>
@@ -66,7 +69,7 @@ export default function App() {
           </main>
           <Footer />
           <MobileCTABar hidden={menuOpen} />
-          <ReviewToggle variant="floating" />
+          <DevNotesBadge />
         </div>
       </ContactIntentProvider>
     </MotionProvider>
@@ -77,7 +80,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   const is404 = isRouteErrorResponse(error) && error.status === 404;
   return (
     <main className="container-site flex min-h-svh flex-col justify-center py-24">
-      <p className="text-small font-semibold text-cobalto">{is404 ? "Error 404" : "Error"}</p>
+      <p className="text-small font-semibold text-acento">{is404 ? "Error 404" : "Error"}</p>
       <h1 className="font-display mt-4 text-h2">{is404 ? "Esta página no existe." : "Algo ha fallado."}</h1>
       <p className="mt-4 max-w-[32rem] text-piedra">
         {is404 ? "Puede que el enlace esté mal escrito o que la página se haya movido." : "Recarga la página o vuelve al inicio."}

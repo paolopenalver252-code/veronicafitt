@@ -1,36 +1,36 @@
-import { Check } from "lucide-react";
-import { RevealLines } from "~/components/motion/RevealLines";
-import { PendingNote } from "~/components/ui/Pending";
+import { FadeIn } from "~/components/motion/Reveal";
+import { ScrollWords } from "~/components/motion/ScrollWords";
+import { DevNote } from "~/components/ui/Pending";
 import { manifesto } from "~/data/home";
 
-/** Propuesta de valor + espejo ("esto es para ti si…"). */
+/** Declaración de marca: mucho aire, una frase grande que se enciende con el scroll. */
 export function Manifesto() {
   return (
-    <section id="manifiesto" aria-labelledby="manifiesto-title" className="section-y">
+    <section id="manifiesto" aria-labelledby="manifiesto-title" className="py-[clamp(8rem,4rem+12vw,16rem)]">
       <div className="container-site">
-        <RevealLines
+        <ScrollWords
           as="h2"
           id="manifiesto-title"
-          lines={manifesto.lines}
-          width={{ from: 104, to: 84 }}
-          className="font-display text-statement"
+          text={manifesto.statement}
+          className="font-display max-w-[14ch] text-statement text-balance"
         />
 
-        <div className="mt-14 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:gap-10">
-          <p className="text-lead text-pretty text-piedra lg:col-span-5">{manifesto.body}</p>
+        <div className="mt-20 grid gap-14 lg:mt-32 lg:grid-cols-12 lg:gap-10">
+          <FadeIn className="lg:col-span-4 lg:col-start-2">
+            <p className="text-lead text-pretty text-piedra">{manifesto.body}</p>
+          </FadeIn>
 
-          <div className="lg:col-span-6 lg:col-start-7">
-            <h3 className="font-heading text-h3">{manifesto.forWhomTitle}</h3>
-            <ul className="mt-6 border-t border-linea">
+          <FadeIn delay={0.1} className="lg:col-span-5 lg:col-start-8">
+            <h3 className="label">{manifesto.forWhomTitle}</h3>
+            <ul className="mt-5">
               {manifesto.forWhom.map((item) => (
-                <li key={item} className="flex gap-4 border-b border-linea py-4">
-                  <Check aria-hidden className="mt-1 size-5 shrink-0 text-cobalto" strokeWidth={2.25} />
-                  <span>{item}</span>
+                <li key={item} className="border-t border-linea py-4 text-pretty last:border-b">
+                  {item}
                 </li>
               ))}
             </ul>
-            <PendingNote value={manifesto.forWhomNote} className="mt-4" />
-          </div>
+            <DevNote value={manifesto.forWhomNote} className="mt-4" />
+          </FadeIn>
         </div>
       </div>
     </section>

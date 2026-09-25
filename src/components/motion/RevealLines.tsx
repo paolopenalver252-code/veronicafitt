@@ -1,5 +1,5 @@
-import { m } from "motion/react";
-import type { CSSProperties, ElementType, ReactNode } from "react";
+import { m, useInView } from "motion/react";
+import { useRef, type ElementType, type ReactNode } from "react";
 import { cn } from "~/lib/cn";
 import { easeOutSoft } from "./MotionProvider";
 
@@ -11,16 +11,15 @@ type Props = {
   lineClassName?: string;
   /** "load": al montar (hero). "view": al entrar en pantalla, una sola vez. */
   trigger?: "load" | "view";
-  /**
-   * Gesto de marca: la anchura de la tipografía pasa de `from` a `to`.
-   * Las líneas no se parten (nowrap), así que no hay saltos de layout.
-   */
-  width?: { from: number; to: number };
   delay?: number;
   before?: ReactNode;
 };
 
-/** Revelado por líneas con máscara. Cada línea sube desde debajo de su propia caja. */
+/**
+ * Revelado por líneas con máscara: cada línea sube desde debajo de su propia caja.
+ * La visibilidad se observa en el contenedor (nunca recortado), no en las líneas,
+ * que empiezan ocultas por su máscara y el observador podría no detectarlas.
+ */
 export function RevealLines({
   lines,
   as: Tag = "p",
@@ -28,39 +27,24 @@ export function RevealLines({
   className,
   lineClassName,
   trigger = "view",
-  width,
   delay = 0,
   before,
 }: Props) {
-  const target = {
-    y: "0%",
-    ...(width ? { "--wdth": width.to } : {}),
-  };
-  const animateProps =
-    trigger === "load"
-      ? { animate: target }
-      : { whileInView: target, viewport: { once: true, margin: "0px 0px -12% 0px" } };
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
+  const show = trigger === "load" || inView;
 
   return (
-    <Tag id={id} className={className}>
+    <Tag ref={ref} id={id} className={className}>
       {before}
       {lines.map((line, i) => (
-        <span key={line} className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
+        <span key={line} className="-mb-[0.14em] block overflow-hidden pb-[0.14em]">
           <m.span
             data-motion
-            className={cn("block whitespace-nowrap", lineClassName)}
-            style={
-              width
-                ? // font-variation-settings se declara en la propia línea: así lee su --wdth animado.
-                  ({ "--wdth-final": width.to, fontVariationSettings: '"wdth" var(--wdth)' } as CSSProperties)
-                : undefined
-            }
-            initial={{ y: "105%", ...(width ? { "--wdth": width.from } : {}) }}
-            {...animateProps}
-            transition={{
-              y: { duration: 0.8, ease: easeOutSoft, delay: delay + i * 0.09 },
-              "--wdth": { duration: 1.3, ease: easeOutSoft, delay: delay + i * 0.09 },
-            }}
+            className={cn("block", lineClassName)}
+            initial={{ y: "108%" }}
+            animate={show ? { y: "0%" } : undefined}
+            transition={{ duration: 1, ease: easeOutSoft, delay: delay + i * 0.1 }}
           >
             {line}{" "}
           </m.span>

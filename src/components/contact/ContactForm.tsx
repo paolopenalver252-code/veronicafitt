@@ -82,11 +82,7 @@ export function ContactForm() {
 
   return (
     <form noValidate onSubmit={onSubmit} className="rounded-card bg-tiza p-6 text-grafito sm:p-8 lg:p-10">
-      <p className="rounded-field bg-cielo px-4 py-3 text-small text-cobalto">
-        Formulario en preparación: todavía no envía mensajes.
-      </p>
-
-      <div className="mt-6 grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-2">
         <Field id={fieldId("name")} label="Nombre" error={errors.name}>
           <input
             id={fieldId("name")}
@@ -181,7 +177,7 @@ export function ContactForm() {
           onChange={(e) => set("consent", e.target.checked)}
           aria-invalid={Boolean(errors.consent)}
           aria-describedby={describedBy("consent")}
-          className="mt-0.5 size-5 shrink-0 accent-cobalto"
+          className="mt-0.5 size-5 shrink-0 accent-acento"
         />
         <label htmlFor={fieldId("consent")} className="text-small text-piedra">
           He leído la{" "}
@@ -216,7 +212,7 @@ export function ContactForm() {
         className={cn(
           "mt-5 text-small font-medium empty:hidden",
           status.type === "error" && "text-error",
-          status.type === "info" && "rounded-field border border-cobalto/30 bg-cielo px-4 py-3 text-cobalto",
+          status.type === "info" && "rounded-field border border-linea bg-blanco px-4 py-3 text-grafito",
         )}
       >
         {status.type !== "idle" ? status.message : ""}
