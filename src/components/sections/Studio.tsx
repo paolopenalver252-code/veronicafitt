@@ -1,7 +1,5 @@
-import { m, useInView } from "motion/react";
-import { useRef } from "react";
 import { Media } from "~/components/media/Media";
-import { easeOutSoft } from "~/components/motion/MotionProvider";
+import { OdometerNumber } from "~/components/motion/OdometerNumber";
 import { FadeIn, ImageReveal, ScrollSettle } from "~/components/motion/Reveal";
 import { RevealLines } from "~/components/motion/RevealLines";
 import { DevNote } from "~/components/ui/Pending";
@@ -12,34 +10,24 @@ import { isPending } from "~/lib/pending";
 /** 45 m²: la escala íntima convertida en el momento visual más potente de la página. */
 export function Studio() {
   const facts = studio.facts;
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const inView = useInView(titleRef, { once: true, margin: "0px 0px -10% 0px" });
 
   return (
     <section id="sala" aria-labelledby="sala-title" className="section-y overflow-hidden">
       <div className="container-site">
         <p className="label text-acento">{studio.title}</p>
-        <h2 ref={titleRef} id="sala-title" className="mt-6 grid items-end gap-6 lg:grid-cols-12 lg:gap-10">
-          <span className="block overflow-hidden lg:col-span-7">
-            <m.span
-              data-motion
-              className="font-display flex items-start text-giant leading-[0.8] tracking-[-0.05em]"
-              initial={{ y: "100%" }}
-              animate={inView ? { y: "0%" } : undefined}
-              transition={{ duration: 1.3, ease: easeOutSoft }}
-            >
-              {studio.size}
-              <span aria-hidden className="mt-[0.08em] ml-2 text-[0.22em] tracking-normal">
-                m²
-              </span>
-            </m.span>
+        <h2 id="sala-title" className="mt-6 grid items-end gap-8 lg:grid-cols-12 lg:gap-10">
+          <span className="font-display flex items-start text-giant tracking-[-0.05em] lg:col-span-6">
+            <OdometerNumber value={studio.size} label={`${studio.size} metros cuadrados.`} className="-mt-[0.26em] -mb-[0.17em]" />
+            <span aria-hidden className="mt-[0.02em] ml-2 text-[0.22em] tracking-normal">
+              m²
+            </span>
           </span>
-          <span className="sr-only">metros cuadrados. </span>
           <RevealLines
             as="span"
-            delay={0.2}
+            delay={0.3}
             lines={studio.lines}
-            className="font-display block text-h2 lg:col-span-5 lg:pb-[0.4em]"
+            lineClassName="lg:whitespace-nowrap"
+            className="font-display block text-h2 lg:col-span-6 lg:pb-[0.3em] lg:text-[clamp(2.75rem,1rem+3.4vw,4.25rem)]"
           />
         </h2>
       </div>

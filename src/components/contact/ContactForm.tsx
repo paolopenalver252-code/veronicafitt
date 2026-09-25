@@ -63,7 +63,7 @@ export function ContactForm() {
       setStatus({
         type: "info",
         message:
-          "Esto es una demo: el formulario todavía no está conectado, así que tu mensaje no se ha enviado. Los datos no se han guardado.",
+          "Gracias por escribirme. El formulario todavía no está activo, así que tu mensaje no se ha enviado ni guardado. Mientras tanto, puedes escribirme por Instagram: @veronica_calabuch.",
       });
     } else {
       setStatus({ type: "error", message: result.message });

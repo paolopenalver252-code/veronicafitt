@@ -19,7 +19,7 @@ export function Hero() {
         <div className="relative lg:order-2 lg:col-span-5 lg:col-start-8 lg:justify-self-end">
           <m.div
             data-motion
-            className="relative h-[58svh] min-h-[24rem] w-full overflow-hidden lg:aspect-[9/16] lg:h-[min(80svh,54rem)] lg:min-h-0 lg:w-auto"
+            className="relative h-[48svh] min-h-[22rem] w-full overflow-hidden lg:aspect-[9/16] lg:h-[min(80svh,54rem)] lg:min-h-0 lg:w-auto"
             initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
             animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
             transition={{ duration: 1.4, ease: easeOutSoft, delay: 0.15 }}
@@ -45,7 +45,7 @@ export function Hero() {
           />
         </div>
 
-        <div className="px-5 pt-9 pb-16 md:px-10 lg:order-1 lg:col-span-7 lg:px-0 lg:pt-0 lg:pb-2">
+        <div className="flex flex-col px-5 pt-7 pb-16 md:px-10 lg:order-1 lg:col-span-7 lg:px-0 lg:pt-0 lg:pb-2">
           <RevealLines
             as="h1"
             id="hero-title"
@@ -56,7 +56,7 @@ export function Hero() {
             before={
               <m.span
                 data-motion
-                className="mb-8 block font-sans lg:mb-12"
+                className="mb-6 block font-sans lg:mb-12"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.1 }}
@@ -69,19 +69,27 @@ export function Hero() {
             }
           />
 
+          {/* En móvil el CTA va antes que el texto: así entra en el primer pantallazo. */}
+          <m.p
+            data-motion
+            className="order-3 mt-7 max-w-[29rem] text-lead text-pretty text-piedra lg:order-2 lg:mt-10"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: easeOutSoft, delay: 0.95 }}
+          >
+            {hero.subtitle}
+          </m.p>
           <m.div
             data-motion
+            className="order-2 mt-7 flex items-center gap-6 lg:order-3 lg:mt-10 lg:gap-8"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: easeOutSoft, delay: 0.85 }}
           >
-            <p className="mt-8 max-w-[29rem] text-lead text-pretty text-piedra lg:mt-10">{hero.subtitle}</p>
-            <div className="mt-9 flex flex-col gap-4 xs:flex-row xs:items-center xs:gap-8">
-              <ContactCta className="w-full xs:w-auto xs:px-9">{hero.primaryCta}</ContactCta>
-              <a href={`#${hero.secondaryCta.anchor}`} className={textLinkClasses("min-h-11 self-start xs:self-auto")}>
-                {hero.secondaryCta.label}
-              </a>
-            </div>
+            <ContactCta className="px-9">{hero.primaryCta}</ContactCta>
+            <a href={`#${hero.secondaryCta.anchor}`} className={textLinkClasses()}>
+              {hero.secondaryCta.label}
+            </a>
           </m.div>
         </div>
       </div>

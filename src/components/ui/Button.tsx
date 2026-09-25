@@ -4,10 +4,16 @@ import { cn } from "~/lib/cn";
 
 export type ButtonVariant = "primary" | "secondary" | "inverse" | "inverse-outline";
 
+/*
+ * Botón de la marca (adaptación del Animated Button de Vengeance UI):
+ * - pulsar (ratón o dedo): se hunde a 0,97 y vuelve con un muelle corto;
+ * - pasar el ratón o recibir foco de teclado: el texto rueda una vez hacia arriba.
+ * Sin brillo en bucle ni animación constante. Solo CSS.
+ */
 const base =
-  "inline-flex min-h-13 items-center justify-center gap-2.5 rounded-full px-6 text-[1rem] font-semibold leading-none " +
-  "select-none transition-[background-color,color,border-color,transform] duration-(--duration-ui) ease-(--ease-out-soft) " +
-  "active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50";
+  "group/btn inline-flex min-h-13 items-center justify-center gap-2.5 rounded-full px-7 text-[1rem] font-semibold leading-none " +
+  "select-none [transition:background-color_200ms,color_200ms,border-color_200ms,transform_350ms_var(--ease-press)] " +
+  "active:scale-[0.97] active:duration-100 disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<ButtonVariant, string> = {
   primary: "bg-acento text-white hover:bg-acento-hover",
@@ -18,6 +24,28 @@ const variants: Record<ButtonVariant, string> = {
 
 export function buttonClasses(variant: ButtonVariant = "primary", className?: string) {
   return cn(base, variants[variant], className);
+}
+
+const roll = "block transition-transform duration-[450ms] ease-(--ease-out-soft)";
+
+/** Texto que rueda: el original sube y una copia (oculta al lector) entra desde abajo. */
+export function RollLabel({ children }: { children: ReactNode }) {
+  return (
+    <span className="relative inline-flex overflow-hidden py-[0.2em] leading-[1.15]">
+      <span className={cn(roll, "group-hover/btn:-translate-y-[130%] group-focus-visible/btn:-translate-y-[130%]")}>
+        {children}
+      </span>
+      <span
+        aria-hidden
+        className={cn(
+          roll,
+          "absolute inset-x-0 top-[0.2em] translate-y-[130%] group-hover/btn:translate-y-0 group-focus-visible/btn:translate-y-0",
+        )}
+      >
+        {children}
+      </span>
+    </span>
+  );
 }
 
 type CommonProps = { variant?: ButtonVariant; icon?: ReactNode; className?: string; children: ReactNode };
@@ -31,7 +59,7 @@ export function Button({
 }: CommonProps & ComponentPropsWithoutRef<"button">) {
   return (
     <button className={buttonClasses(variant, className)} {...props}>
-      {children}
+      <RollLabel>{children}</RollLabel>
       {icon}
     </button>
   );
@@ -52,7 +80,7 @@ export function ButtonLink({
   if (isInternalRoute) {
     return (
       <Link to={href} className={classes} {...props}>
-        {children}
+        <RollLabel>{children}</RollLabel>
         {icon}
       </Link>
     );
@@ -66,7 +94,7 @@ export function ButtonLink({
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       {...props}
     >
-      {children}
+      <RollLabel>{children}</RollLabel>
       {icon}
     </a>
   );
@@ -75,8 +103,8 @@ export function ButtonLink({
 /** Enlace de texto con subrayado que se desplaza. Para CTAs contextuales. */
 export function textLinkClasses(className?: string) {
   return cn(
-    "inline-flex items-center gap-1.5 font-semibold text-acento underline decoration-[1.5px] underline-offset-[0.3em] " +
-      "decoration-acento/35 transition-[text-decoration-color,text-underline-offset] duration-(--duration-ui) " +
+    "inline-flex min-h-11 items-center gap-1.5 font-semibold text-acento underline decoration-[1.5px] underline-offset-[0.3em] " +
+      "decoration-acento/35 transition-[text-decoration-color,text-underline-offset] duration-200 " +
       "hover:decoration-acento hover:underline-offset-[0.2em]",
     className,
   );

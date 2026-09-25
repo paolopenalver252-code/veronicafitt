@@ -4,6 +4,7 @@ import { isPending, resolved } from "~/lib/pending";
 import type { MediaSlot } from "~/types/content";
 import { MediaPlaceholder } from "./MediaPlaceholder";
 import { useAutoplayAllowed } from "./useAutoplayAllowed";
+import { useVideoControl, VideoToggle } from "./VideoToggle";
 
 const cover = "absolute inset-0 h-full w-full object-cover";
 
@@ -18,6 +19,7 @@ export function HeroMedia({ slot }: { slot: MediaSlot }) {
   const allowed = useAutoplayAllowed();
   const [load, setLoad] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const control = useVideoControl(ref);
   const src = resolved(slot.src);
   const poster = slot.poster ? resolved(slot.poster) : null;
   const isVideo = slot.kind === "video";
@@ -43,12 +45,12 @@ export function HeroMedia({ slot }: { slot: MediaSlot }) {
     const video = ref.current;
     if (!video || !load) return;
     const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) video.play().catch(() => {});
+      if (entry.isIntersecting) control.autoPlay();
       else video.pause();
     });
     observer.observe(video);
     return () => observer.disconnect();
-  }, [load]);
+  }, [load, control]);
 
   const image = isVideo ? poster : src;
 
@@ -84,6 +86,7 @@ export function HeroMedia({ slot }: { slot: MediaSlot }) {
           style={{ objectPosition: slot.focal }}
         />
       )}
+      {playing && <VideoToggle paused={control.paused} onToggle={control.toggle} />}
     </>
   );
 }

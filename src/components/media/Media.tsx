@@ -4,6 +4,7 @@ import { isPending, resolved } from "~/lib/pending";
 import type { MediaSlot } from "~/types/content";
 import { MediaPlaceholder, type PlaceholderTone } from "./MediaPlaceholder";
 import { useAutoplayAllowed } from "./useAutoplayAllowed";
+import { useVideoControl, VideoToggle } from "./VideoToggle";
 
 type MediaProps = {
   slot: MediaSlot;
@@ -56,6 +57,7 @@ function LazyVideo({ slot, priority, className }: MediaProps) {
   const allowed = useAutoplayAllowed();
   const [shouldLoad, setShouldLoad] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const control = useVideoControl(ref);
   const src = resolved(slot.src);
   const poster = slot.poster ? resolved(slot.poster) : null;
 
@@ -66,7 +68,7 @@ function LazyVideo({ slot, priority, className }: MediaProps) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setShouldLoad(true);
-          video.play().catch(() => {});
+          control.autoPlay();
         } else {
           video.pause();
         }
@@ -75,7 +77,7 @@ function LazyVideo({ slot, priority, className }: MediaProps) {
     );
     observer.observe(video);
     return () => observer.disconnect();
-  }, [allowed]);
+  }, [allowed, control]);
 
   return (
     <>
@@ -109,6 +111,7 @@ function LazyVideo({ slot, priority, className }: MediaProps) {
         )}
         style={{ objectPosition: slot.focal }}
       />
+      {playing && <VideoToggle paused={control.paused} onToggle={control.toggle} />}
     </>
   );
 }

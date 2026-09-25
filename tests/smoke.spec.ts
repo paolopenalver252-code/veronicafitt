@@ -78,7 +78,7 @@ test.describe("Home", () => {
     await expect(button).toHaveAttribute("aria-expanded", "false");
   });
 
-  test("formulario: validación, sin datos de salud y aviso de demo", async ({ page }) => {
+  test("formulario: validación, sin datos de salud y mensaje honesto", async ({ page }) => {
     await page.goto("/#contacto");
     const form = page.locator("#contacto form");
     await expect(form.getByText(/lesi[oó]n/i)).toHaveCount(1); // solo el aviso de no incluir información médica
@@ -93,6 +93,7 @@ test.describe("Home", () => {
     await page.waitForTimeout(3100); // antispam: envíos de menos de 3 s se descartan
     await form.getByRole("button", { name: "Enviar mensaje" }).click();
     await expect(form.getByRole("status")).toContainText("no se ha enviado");
+    await expect(form.getByRole("status")).not.toContainText("demo");
   });
 
   test("el CTA de un servicio preselecciona el formulario", async ({ page }) => {
@@ -156,4 +157,20 @@ test("paleta alternativa para comparar", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("data-palette", "cobalto");
   await page.goto("/?paleta=granate");
   await expect(page.locator("html")).not.toHaveAttribute("data-palette", /.+/);
+});
+
+test.describe("Mobile-first", () => {
+  for (const [width, height] of [[375, 812], [390, 844], [430, 932]] as const) {
+    test(`${width}×${height}: CTA del hero en el primer pantallazo y cabecera limpia`, async ({ browser }) => {
+      const context = await browser.newContext({ viewport: { width, height }, isMobile: true, hasTouch: true });
+      const page = await context.newPage();
+      await page.goto("/");
+      const cta = page.locator("#inicio").getByRole("link", { name: "Escríbeme" });
+      await expect(cta).toBeInViewport();
+      const box = await cta.boundingBox();
+      expect(box!.y + box!.height).toBeLessThanOrEqual(height);
+      await expect(page.locator("header").getByRole("link", { name: "Escríbeme" })).toBeHidden();
+      await context.close();
+    });
+  }
 });

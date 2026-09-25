@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { Media } from "~/components/media/Media";
 import { FadeIn, ScrollSettle } from "~/components/motion/Reveal";
@@ -14,6 +15,16 @@ import { onlineIntro, workouts } from "~/data/online";
 export function OnlinePreview() {
   const preview = workouts.slice(0, 3);
   const tones = ["deep", "light", "deep"] as const;
+  const railRef = useRef<HTMLUListElement>(null);
+  const [current, setCurrent] = useState(0);
+
+  // Móvil: qué tarjeta está a la vista (para el indicador "1 / 3").
+  const onRailScroll = () => {
+    const rail = railRef.current;
+    const first = rail?.firstElementChild as HTMLElement | null;
+    if (!rail || !first) return;
+    setCurrent(Math.min(preview.length - 1, Math.round(rail.scrollLeft / (first.offsetWidth + 20))));
+  };
 
   return (
     <section id="online" aria-labelledby="online-title" className="section-y bg-blanco">
@@ -68,13 +79,29 @@ export function OnlinePreview() {
           </Link>
         </div>
 
-        <ul className="-mx-5 mt-10 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pb-4 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:px-0 md:pb-0">
+        <ul
+          ref={railRef}
+          onScroll={onRailScroll}
+          className="-mx-5 mt-10 flex snap-x snap-mandatory scroll-px-5 gap-5 overflow-x-auto px-5 pb-4 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:px-0 md:pb-0"
+        >
           {preview.map((w, i) => (
             <FadeIn as="li" key={w.id} delay={i * 0.1} className="w-[78%] shrink-0 snap-start xs:w-[66%] md:w-auto">
               <WorkoutCard workout={w} headingLevel={4} tone={tones[i]} />
             </FadeIn>
           ))}
         </ul>
+        {/* Indicador del carrusel (solo móvil): deja claro que se puede deslizar. */}
+        <div aria-hidden className="mt-4 flex items-center gap-4 md:hidden">
+          <span className="text-micro text-piedra tabular-nums">
+            {current + 1} / {preview.length}
+          </span>
+          <span className="relative h-px flex-1 bg-linea">
+            <span
+              className="absolute inset-y-0 left-0 bg-acento transition-[width] duration-500 ease-(--ease-out-soft)"
+              style={{ width: `${((current + 1) / preview.length) * 100}%` }}
+            />
+          </span>
+        </div>
       </div>
     </section>
   );

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router";
 import { ContactCta } from "~/components/contact/ContactIntent";
 import { navItems, site } from "~/data/site";
+import { useActiveSection } from "~/hooks/useActiveSection";
 import { useScrollDirection } from "~/hooks/useScrollDirection";
 import { cn } from "~/lib/cn";
 import { AnchorLink } from "./AnchorLink";
@@ -11,6 +12,7 @@ import { MobileMenu } from "./MobileMenu";
 
 export function Navbar({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOpen: (open: boolean) => void }) {
   const { direction, scrolled } = useScrollDirection();
+  const active = useActiveSection(navItems.map((i) => i.anchor));
   const toggleRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
   const hidden = direction === "down" && scrolled && !menuOpen;
@@ -52,7 +54,7 @@ export function Navbar({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOp
         <div className="container-site flex h-full items-center justify-between gap-6">
           <Link
             to="/"
-            className="font-heading text-[1.125rem] leading-none xs:text-[1.25rem] lg:text-[1.375rem]"
+            className="font-heading inline-flex min-h-11 items-center text-[1.1875rem] leading-none whitespace-nowrap lg:text-[1.375rem]"
             aria-label={`${site.name}, inicio`}
           >
             {site.name}
@@ -64,7 +66,12 @@ export function Navbar({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOp
                 <li key={item.anchor}>
                   <AnchorLink
                     anchor={item.anchor}
-                    className="text-small font-medium text-grafito/80 transition-colors hover:text-grafito"
+                    current={active === item.anchor}
+                    className={cn(
+                      "relative inline-flex min-h-11 items-center text-small font-medium transition-colors hover:text-grafito",
+                      "after:absolute after:inset-x-0 after:bottom-2 after:h-px after:origin-left after:bg-acento after:transition-transform after:duration-500",
+                      active === item.anchor ? "text-grafito after:scale-x-100" : "text-grafito/75 after:scale-x-0",
+                    )}
                   >
                     {item.label}
                   </AnchorLink>
@@ -74,25 +81,27 @@ export function Navbar({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOp
           </nav>
 
           <div className="flex items-center gap-2">
-            <ContactCta className={cn("min-h-10 px-4 text-small sm:min-h-11 sm:px-5", menuOpen && "invisible")}>
-              Escríbeme
-            </ContactCta>
+            {/* En móvil la cabecera queda limpia: el CTA vive en el hero y en la píldora flotante. */}
+            <div className="hidden sm:block">
+              <ContactCta className={cn("min-h-11 px-6 text-small", menuOpen && "invisible")}>Escríbeme</ContactCta>
+            </div>
             <button
               ref={toggleRef}
               type="button"
-              className="-mr-2 inline-flex size-11 items-center justify-center rounded-full lg:hidden"
+              className="-mr-2 inline-flex min-h-11 items-center gap-2.5 px-2 text-small font-semibold lg:hidden"
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
               onClick={() => setMenuOpen(!menuOpen)}
             >
-              {menuOpen ? <X aria-hidden className="size-6" /> : <Menu aria-hidden className="size-6" />}
+              <span aria-hidden>{menuOpen ? "Cerrar" : "Menú"}</span>
+              {menuOpen ? <X aria-hidden className="size-5" strokeWidth={1.5} /> : <Menu aria-hidden className="size-5" strokeWidth={1.5} />}
             </button>
           </div>
         </div>
       </header>
 
-      <AnimatePresence>{menuOpen && <MobileMenu onClose={() => setMenuOpen(false)} />}</AnimatePresence>
+      <AnimatePresence>{menuOpen && <MobileMenu active={active} onClose={() => setMenuOpen(false)} />}</AnimatePresence>
     </>
   );
 }

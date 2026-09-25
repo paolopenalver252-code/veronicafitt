@@ -34,7 +34,8 @@ export function WaitlistForm({ tone = "light", className }: { tone?: "light" | "
     else if (result.status === "not-connected")
       setStatus({
         type: "done",
-        message: "Esto es una demo: la lista de espera todavía no está conectada, así que no se ha guardado tu email.",
+        message:
+          "La lista de espera se abrirá muy pronto: todavía no he guardado tu email. Mientras tanto, puedes seguirme en Instagram: @veronica_calabuch.",
       });
     else setStatus({ type: "error", message: result.message });
   };

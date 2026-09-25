@@ -1,7 +1,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router";
-import { buttonClasses, type ButtonVariant } from "~/components/ui/Button";
-import { cn } from "~/lib/cn";
+import { buttonClasses, RollLabel, type ButtonVariant } from "~/components/ui/Button";
 import { whatsappUrl } from "~/lib/whatsapp";
 import type { ServiceId } from "~/types/content";
 
@@ -39,6 +38,7 @@ export function ContactCta({ children, service, variant = "primary", className, 
   const { pathname } = useLocation();
   const wa = whatsappUrl(service ?? "general");
   const classes = variant === "text" ? className : buttonClasses(variant, className);
+  const label = variant === "text" ? children : <RollLabel>{children}</RollLabel>;
 
   const handleClick = () => {
     if (service) setIntent(service);
@@ -48,7 +48,7 @@ export function ContactCta({ children, service, variant = "primary", className, 
   if (wa) {
     return (
       <a href={wa} target="_blank" rel="noopener noreferrer" className={classes} onClick={handleClick}>
-        {children}
+        {label}
         {icon}
       </a>
     );
@@ -56,8 +56,8 @@ export function ContactCta({ children, service, variant = "primary", className, 
 
   if (pathname === "/") {
     return (
-      <a href="#contacto" className={cn(classes)} onClick={handleClick}>
-        {children}
+      <a href="#contacto" className={classes} onClick={handleClick}>
+        {label}
         {icon}
       </a>
     );
@@ -65,7 +65,7 @@ export function ContactCta({ children, service, variant = "primary", className, 
 
   return (
     <Link to="/#contacto" className={classes} onClick={handleClick}>
-      {children}
+      {label}
       {icon}
     </Link>
   );

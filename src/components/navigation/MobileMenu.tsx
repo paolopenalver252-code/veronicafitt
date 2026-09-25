@@ -4,14 +4,15 @@ import { ContactCta } from "~/components/contact/ContactIntent";
 import { easeOutSoft } from "~/components/motion/MotionProvider";
 import { InstagramIcon } from "~/components/ui/InstagramIcon";
 import { navItems, site } from "~/data/site";
+import { cn } from "~/lib/cn";
 import { AnchorLink } from "./AnchorLink";
 
 /** Menú móvil a pantalla completa. El resto de la página queda inerte mientras está abierto. */
-export function MobileMenu({ onClose }: { onClose: () => void }) {
-  const firstLink = useRef<HTMLDivElement>(null);
+export function MobileMenu({ onClose, active }: { onClose: () => void; active: string | null }) {
+  const listRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    firstLink.current?.querySelector("a")?.focus({ preventScroll: true });
+    listRef.current?.querySelector("a")?.focus({ preventScroll: true });
   }, []);
 
   return (
@@ -26,30 +27,46 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
       exit={{ opacity: 0, transition: { duration: 0.18 } }}
       transition={{ duration: 0.25 }}
     >
-      <nav aria-label="Menú móvil" className="container-site flex flex-1 flex-col pt-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
-        <div ref={firstLink}>
-          <ul className="flex flex-col">
-            {navItems.map((item, i) => (
+      <nav
+        aria-label="Menú móvil"
+        className="container-site flex flex-1 flex-col pt-8 pb-[max(1.5rem,env(safe-area-inset-bottom))]"
+      >
+        <ul ref={listRef} className="flex flex-col">
+          {navItems.map((item, i) => {
+            const isActive = active === item.anchor;
+            return (
               <m.li
                 key={item.anchor}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, ease: easeOutSoft, delay: 0.04 * i }}
-                className="border-b border-linea"
+                transition={{ duration: 0.5, ease: easeOutSoft, delay: 0.05 + 0.04 * i }}
               >
                 <AnchorLink
                   anchor={item.anchor}
+                  current={isActive}
                   onClick={onClose}
-                  className="font-heading flex min-h-16 items-center text-[1.875rem]"
+                  className={cn(
+                    "font-display flex min-h-15 items-center gap-4 text-[2.25rem] leading-none transition-colors",
+                    isActive ? "text-acento" : "text-grafito",
+                  )}
                 >
+                  <span
+                    aria-hidden
+                    className={cn("h-px bg-acento transition-[width] duration-500", isActive ? "w-6" : "w-0")}
+                  />
                   {item.label}
                 </AnchorLink>
               </m.li>
-            ))}
-          </ul>
-        </div>
+            );
+          })}
+        </ul>
 
-        <div className="mt-auto flex flex-col gap-5 pt-10">
+        <m.div
+          className="mt-auto flex flex-col gap-5 pt-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
           <ContactCta className="w-full" onClick={onClose}>
             Escríbeme
           </ContactCta>
@@ -57,12 +74,12 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
             href={site.instagram.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-11 items-center gap-2 self-start text-small font-medium text-piedra"
+            className="inline-flex min-h-11 items-center gap-2 self-center text-small text-piedra"
           >
             <InstagramIcon className="size-5" />
             {site.instagram.handle}
           </a>
-        </div>
+        </m.div>
       </nav>
     </m.div>
   );

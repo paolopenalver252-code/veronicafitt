@@ -6,17 +6,21 @@ export function AnchorLink({
   anchor,
   children,
   className,
+  current = false,
   onClick,
 }: {
   anchor: string;
   children: ReactNode;
   className?: string;
+  /** Sección visible ahora mismo (se anuncia a lectores de pantalla). */
+  current?: boolean;
   onClick?: () => void;
 }) {
   const { pathname } = useLocation();
+  const ariaCurrent = current ? ("location" as const) : undefined;
   if (pathname === "/") {
     return (
-      <a href={`#${anchor}`} className={className} onClick={onClick}>
+      <a href={`#${anchor}`} className={className} aria-current={ariaCurrent} onClick={onClick}>
         {children}
       </a>
     );

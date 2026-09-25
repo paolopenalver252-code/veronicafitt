@@ -32,11 +32,15 @@ export function About() {
           </FadeIn>
 
           <FadeIn delay={0.1}>
-            <dl className="mt-12 grid grid-cols-3 border-t border-linea">
+            {/* Móvil: filas (título | texto). Desde sm: tres columnas separadas por filetes. */}
+            <dl className="mt-12 border-t border-linea sm:grid sm:grid-cols-3">
               {about.principles.map((p) => (
-                <div key={p.title} className="border-r border-linea py-5 pr-3 pl-3 first:pl-0 last:border-r-0">
-                  <dt className="font-heading text-[1.375rem] leading-tight">{p.title}</dt>
-                  <dd className="mt-1.5 text-small text-piedra">{p.body}</dd>
+                <div
+                  key={p.title}
+                  className="flex items-baseline justify-between gap-6 border-b border-linea py-4 sm:block sm:border-r sm:border-b-0 sm:px-4 sm:py-5 sm:first:pl-0 sm:last:border-r-0"
+                >
+                  <dt className="font-heading text-[1.5rem] leading-tight sm:text-[1.375rem]">{p.title}</dt>
+                  <dd className="text-right text-small text-piedra sm:mt-1.5 sm:text-left">{p.body}</dd>
                 </div>
               ))}
             </dl>

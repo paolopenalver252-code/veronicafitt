@@ -4,6 +4,7 @@ import { Media } from "~/components/media/Media";
 import { ImageReveal } from "~/components/motion/Reveal";
 import { RevealLines } from "~/components/motion/RevealLines";
 import { buttonClasses } from "~/components/ui/Button";
+import { InstagramIcon } from "~/components/ui/InstagramIcon";
 import { DevNote } from "~/components/ui/Pending";
 import { closing } from "~/data/home";
 import { media } from "~/data/media";
@@ -39,6 +40,16 @@ export function Contact() {
               Escríbeme por WhatsApp
             </a>
           )}
+          {/* Canal confirmado mientras no haya WhatsApp: su Instagram. */}
+          <a
+            href={site.instagram.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 inline-flex min-h-11 items-center gap-2.5 text-tiza/90 underline decoration-tiza/40 underline-offset-[0.3em] transition-colors hover:decoration-tiza"
+          >
+            <InstagramIcon className="size-5" />
+            También puedes escribirme por Instagram
+          </a>
           <div className="mt-6 flex flex-col items-start gap-2">
             <DevNote value={site.contact.whatsapp} tone="dark" />
             {details.map((d) => (
