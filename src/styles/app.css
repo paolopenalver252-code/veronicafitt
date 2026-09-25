@@ -1,0 +1,216 @@
+@import "tailwindcss";
+
+/*
+ * Sistema visual de Verónica Calabuch.
+ * PALETA PROVISIONAL: se validará con su material real. Cambiar solo aquí.
+ */
+
+@font-face {
+  font-family: "Archivo Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  src: url("../../node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC,
+    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Fallback con métricas ajustadas para que el cambio de fuente no mueva el layout. */
+@font-face {
+  font-family: "Archivo Fallback";
+  src: local("Arial");
+  size-adjust: 97%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-tiza: #f1f1ee;
+  --color-tiza-deep: #e6e6e1;
+  --color-blanco: #ffffff;
+  --color-grafito: #23272a;
+  --color-grafito-soft: #353a3e;
+  --color-piedra: #5b6064;
+  --color-piedra-light: #a9adb0;
+  --color-cobalto: #2e44c8;
+  --color-cobalto-hover: #2335a6;
+  --color-cobalto-light: #aab6f2;
+  --color-cielo: #dde3f6;
+  --color-linea: #d9d9d4;
+  --color-linea-dark: #464b4f;
+  --color-error: #b3261e;
+  --color-error-light: #f2b8b5;
+
+  /* Marcadores internos de revisión: deliberadamente fuera de la paleta de marca. */
+  --color-pendiente: #7a4d00;
+  --color-pendiente-bg: #fcefd2;
+  --color-pendiente-line: #e9c77d;
+
+  --font-sans: "Archivo Variable", "Archivo Fallback", ui-sans-serif, system-ui, sans-serif;
+
+  /* Escala tipográfica fluida (móvil → escritorio) */
+  --text-display: clamp(2.875rem, 1.9rem + 4.6vw, 7rem);
+  --text-display--line-height: 0.94;
+  --text-statement: clamp(1.9rem, 0.9rem + 5vw, 6rem);
+  --text-statement--line-height: 0.98;
+  --text-h2: clamp(2rem, 1.45rem + 2.4vw, 4rem);
+  --text-h2--line-height: 1;
+  --text-h3: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);
+  --text-h3--line-height: 1.15;
+  --text-lead: clamp(1.1875rem, 1.1rem + 0.35vw, 1.375rem);
+  --text-lead--line-height: 1.5;
+  --text-body: clamp(1.0625rem, 1.03rem + 0.12vw, 1.125rem);
+  --text-body--line-height: 1.6;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.45;
+  --text-micro: 0.8125rem;
+  --text-micro--line-height: 1.35;
+
+  --radius-media: 4px;
+  --radius-card: 12px;
+  --radius-field: 10px;
+
+  --shadow-float: 0 10px 30px -14px rgb(35 39 42 / 0.3);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-ui: 180ms;
+  --duration-reveal: 700ms;
+
+  --breakpoint-xs: 26rem;
+}
+
+/* ---------- Base ---------- */
+
+@layer base {
+  :root {
+    --nav-h: 4rem;
+    --wdth-display: 78;
+    --wdth-heading: 84;
+    color-scheme: light;
+  }
+
+  @media (width >= 64rem) {
+    :root {
+      --nav-h: 4.75rem;
+    }
+  }
+
+  html {
+    background: var(--color-tiza);
+    color: var(--color-grafito);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-weight: 400;
+    font-variation-settings: "wdth" 100;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    min-height: 100svh;
+  }
+
+  :where(section[id], [data-anchor]) {
+    scroll-margin-top: calc(var(--nav-h) + 0.5rem);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cobalto);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-cobalto);
+    color: var(--color-white);
+  }
+
+  /* Inputs a 16 px mínimo: evita el zoom automático de iOS */
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
+}
+
+/* ---------- Utilidades de sistema ---------- */
+
+@utility container-site {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility section-y {
+  padding-block: clamp(5rem, 3.4rem + 6.5vw, 10rem);
+}
+
+/* Titulares: la anchura variable es el gesto de la marca ("se adapta"). */
+@utility font-display {
+  font-weight: 780;
+  letter-spacing: -0.02em;
+  font-variation-settings: "wdth" var(--wdth, var(--wdth-display));
+}
+
+@utility font-heading {
+  font-weight: 720;
+  letter-spacing: -0.015em;
+  font-variation-settings: "wdth" var(--wdth, var(--wdth-heading));
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility text-pretty {
+  text-wrap: pretty;
+}
+
+/* ---------- Animación: accesibilidad y robustez ---------- */
+
+/* Sin JavaScript: todo el contenido animado es visible. Ver <noscript> en root.tsx */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-motion] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    --wdth: var(--wdth-final, var(--wdth-display)) !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Modo revisión (solo demo) ---------- */
+
+html[data-review="off"] .review-only {
+  display: none !important;
+}
