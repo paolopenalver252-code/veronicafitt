@@ -58,10 +58,13 @@ export const media = {
   personal: {
     id: "personal",
     kind: "image",
-    src: pending("Foto de Verónica haciendo un ejercicio de fuerza (4:5)"),
-    width: 1200,
-    height: 1500,
-    alt: "Verónica realizando un ejercicio de fuerza",
+    // Provisional: captura de 265×402 px, se ve pixelada. Sustituir por el original (≥ 1200 px de ancho) con el mismo nombre.
+    src: "/assets/veronica/training/entrenamiento-personal.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/training/entrenamiento-personal.webp" }],
+    width: 265,
+    height: 402,
+    alt: "Sesión de entrenamiento personal: sentadilla con mancuerna en la sala",
+    focal: "50% 45%",
     brief: "Ejercicio de fuerza donde se entienda bien el movimiento.",
   },
   funcional: {
@@ -110,19 +113,23 @@ export const media = {
   studioDetailA: {
     id: "studio-detail-a",
     kind: "image",
-    src: pending("Detalle de la sala: zona de trabajo"),
-    width: 1000,
-    height: 1250,
-    alt: "Detalle de la zona de entrenamiento",
+    // Provisional: captura de 368×487 px. Sustituir por el original con el mismo nombre.
+    src: "/assets/veronica/studio/sala-material.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/studio/sala-material.webp" }],
+    width: 368,
+    height: 487,
+    alt: "Rincón de la sala con barra de dominaciones, estantería de mancuernas y cajón de salto",
     brief: "Detalle del espacio o del material real (no inventar equipamiento).",
   },
   studioDetailB: {
     id: "studio-detail-b",
     kind: "image",
-    src: pending("Detalle de la sala: material"),
-    width: 1000,
-    height: 1250,
-    alt: "Detalle del material de entrenamiento",
+    // Provisional: captura de 311×448 px. Sustituir por el original con el mismo nombre.
+    src: "/assets/veronica/studio/sala-rincon.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/studio/sala-rincon.webp" }],
+    width: 311,
+    height: 448,
+    alt: "Zona de entrenamiento de la sala con esterilla, discos y un rincón con plantas",
     brief: "Segundo detalle: luz, suelo, material o rincón característico.",
   },
   closing: {
