@@ -47,10 +47,12 @@ export const media = {
   aboutDetail: {
     id: "about-detail",
     kind: "image",
-    src: pending("Foto de Verónica guiando a una persona (4:5)"),
-    width: 1000,
-    height: 1250,
-    alt: "Verónica corrigiendo un ejercicio durante una sesión",
+    src: "/assets/veronica/about/veronica-retrato.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/about/veronica-retrato.webp" }],
+    width: 418,
+    height: 548,
+    alt: "Retrato en blanco y negro de Verónica Calabuch sonriendo, con las manos en el pelo",
+    focal: "50% 25%",
     brief: "Verónica acompañando o corrigiendo a alguien. Con consentimiento de imagen.",
   },
   personal: {
@@ -75,10 +77,14 @@ export const media = {
   grupos: {
     id: "grupos",
     kind: "image",
-    src: pending("Foto de varias personas entrenando (o sala preparada para grupo)"),
-    width: 1500,
-    height: 1000,
-    alt: "Entrenamiento en grupo reducido en la sala",
+    // Provisional: captura de 523×394 px. Sustituir por el original (≥ 1500 px de ancho) con el mismo nombre.
+    src: "/assets/veronica/training/grupos-reducidos.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/training/grupos-reducidos.webp" }],
+    width: 523,
+    height: 394,
+    alt: "Entrenamiento en grupo reducido al aire libre, sobre césped",
+    // En móvil (vertical) se recorta: centrado en el grupo principal.
+    focal: "70% 50%",
     brief: "Grupo reducido entrenando en la sala. Todas las personas con consentimiento.",
   },
   online: {
