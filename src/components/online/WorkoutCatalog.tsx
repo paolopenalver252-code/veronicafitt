@@ -81,7 +81,7 @@ export function WorkoutCatalog() {
       <section aria-labelledby="entrenos-title" className="container-site pt-20 lg:pt-28">
         <div className="flex items-center gap-3">
           <h2 id="entrenos-title" className="font-display text-h2">
-            Entrenamientos
+            Sesiones grabadas
           </h2>
           <StatusTag tone="example" className="dev-only">Ejemplo</StatusTag>
         </div>

@@ -1,34 +1,33 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
 import type { Route } from "./+types/online";
+import { ContactCta } from "~/components/contact/ContactIntent";
 import { Media } from "~/components/media/Media";
 import { FadeIn, ScrollSettle } from "~/components/motion/Reveal";
 import { RevealLines } from "~/components/motion/RevealLines";
-import { PackCard } from "~/components/online/PackCard";
 import { WaitlistForm } from "~/components/online/WaitlistForm";
 import { WorkoutCatalog } from "~/components/online/WorkoutCatalog";
+import { PackGrid } from "~/components/packs/PackGrid";
+import { OnlineAudience, OnlineDifference, OnlinePillars } from "~/components/sections/OnlineTraining";
 import { DevNote } from "~/components/ui/Pending";
 import { StatusTag } from "~/components/ui/StatusTag";
 import { media } from "~/data/media";
-import { onlineIntro, packs, workouts } from "~/data/online";
+import { liveTraining } from "~/data/online";
+import { packs } from "~/data/packs";
 import { buildMeta } from "~/lib/seo";
 
 export function meta(_: Route.MetaArgs) {
   return buildMeta({
-    title: "Entrenamiento online con Verónica Calabuch",
+    title: "Entrenamiento online en directo con Verónica Calabuch",
     description:
-      "Entrenamientos grabados de unos 45 minutos, organizados en packs, para entrenar desde casa. En preparación: apúntate a la lista de espera.",
+      "Entrena con Verónica en directo desde casa: corrección de la técnica, motivación y acompañamiento. Y si no puedes conectarte, la sesión grabada.",
     path: "/online",
   });
 }
 
-const howItWorks = [
-  { title: "Sesiones de unos 45 minutos", body: "Entrenamientos completos, grabados por Verónica." },
-  { title: "Organizadas en packs", body: "Para seguir una progresión, no entrenos sueltos." },
-  { title: "Desde casa", body: "Cuando quieras y donde quieras, estés donde estés." },
-];
-
 export default function Online() {
+  const onlinePacks = packs.filter((p) => p.channel === "Online" && p.status !== "draft");
+
   return (
     <>
       <section id="inicio" aria-labelledby="online-title" className="pt-(--nav-h)">
@@ -41,90 +40,92 @@ export default function Online() {
 
         <div className="container-site pt-10 lg:pt-16">
           <div className="flex flex-wrap items-center gap-3">
-            <p className="label text-acento">Entrenamiento online con Verónica Calabuch</p>
-            <StatusTag tone="soon">Próximamente</StatusTag>
+            <p className="label text-acento">Entrenamiento online en directo</p>
+            {liveTraining.status === "coming-soon" && <StatusTag tone="soon">Próximamente</StatusTag>}
           </div>
           <RevealLines
             as="h1"
             id="online-title"
             trigger="load"
             delay={0.1}
-            lines={["Entrena", "donde quieras."]}
+            lines={["Entrena conmigo,", "estés donde estés."]}
             className="font-display mt-8 text-display"
           />
-          <p className="font-heading mt-8 text-h3 text-piedra">
-            {onlineIntro.subtitle.map((line) => (
-              <span key={line} className="block">
-                {line}
-              </span>
-            ))}
-          </p>
+          <p className="mt-8 max-w-[34rem] text-lead text-pretty text-piedra">{liveTraining.lead}</p>
+          <ContactCta service="online" className="mt-9">
+            {liveTraining.cta}
+          </ContactCta>
         </div>
 
         <div className="mt-14 lg:container-site lg:mt-20">
           <ScrollSettle className="aspect-[4/5] sm:aspect-video">
-            <Media slot={media.online} tone="dark" priority sizes="(min-width: 1024px) 84rem, 100vw" />
+            <Media slot={media.online} tone="deep" priority sizes="(min-width: 1024px) 84rem, 100vw" />
           </ScrollSettle>
-        </div>
-
-        <div className="container-site mt-14 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-5">
-            <p className="text-lead text-pretty">{onlineIntro.body}</p>
-            <DevNote value={onlineIntro.launchNote} className="mt-5" />
-          </div>
-          <div className="lg:col-span-6 lg:col-start-7">
-            <h2 className="font-heading text-h3">Te aviso cuando esté lista</h2>
-            <WaitlistForm className="mt-6" />
-          </div>
         </div>
       </section>
 
-      <section aria-labelledby="como-funcionara-title" className="container-site pt-24 lg:pt-36">
-        <h2 id="como-funcionara-title" className="font-display text-h2">
-          Cómo funcionará
-        </h2>
-        <ol className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
-          {howItWorks.map(({ title, body }, i) => (
-            <FadeIn as="li" key={title} delay={i * 0.08} className="border-t border-linea pt-6">
-              <span aria-hidden className="font-display block text-[3rem] leading-none text-acento">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="font-heading mt-5 text-[1.5rem] leading-tight">{title}</h3>
-              <p className="mt-2 text-piedra">{body}</p>
-            </FadeIn>
-          ))}
-        </ol>
-        <DevNote value={onlineIntro.formatNote} className="mt-6" />
+      <section aria-label="Qué lo hace diferente" className="container-site pt-20 lg:pt-32">
+        <OnlineDifference />
+        <OnlinePillars className="mt-16 lg:mt-24" />
+      </section>
+
+      <section aria-labelledby="sesion-title" className="container-site pt-24 lg:pt-36">
+        <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-5">
+            <h2 id="sesion-title" className="font-display text-h2">
+              Así será cada sesión
+            </h2>
+            <ol className="mt-10">
+              {liveTraining.steps.map((step, i) => (
+                <FadeIn as="li" key={step.title} delay={i * 0.08} className="grid grid-cols-[3.5rem_1fr] gap-4 border-t border-linea py-6">
+                  <span aria-hidden className="font-display text-[2.5rem] leading-none text-acento">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3 className="font-heading text-[1.5rem] leading-tight">{step.title}</h3>
+                    <p className="mt-2 text-pretty text-piedra">{step.body}</p>
+                  </div>
+                </FadeIn>
+              ))}
+            </ol>
+          </div>
+          <FadeIn delay={0.1} className="lg:col-span-6 lg:col-start-7">
+            <OnlineAudience />
+            <div className="mt-6 flex flex-col items-start gap-2">
+              {liveTraining.notes.map((n, i) => (
+                <DevNote key={i} value={n} />
+              ))}
+            </div>
+          </FadeIn>
+        </div>
       </section>
 
       <div className="container-site mt-24 lg:mt-32">
         <p className="border-y border-linea py-5 text-small text-piedra">
-          <span className="font-semibold text-grafito">Vista previa.</span> Los entrenamientos todavía no están
-          disponibles: las categorías, sesiones y packs de esta página son ejemplos de cómo funcionará la plataforma.
+          <span className="font-semibold text-grafito">Vista previa de las grabaciones.</span> Así podrás encontrar las
+          sesiones grabadas cuando no puedas conectarte en directo. Las categorías y sesiones de esta página son ejemplos.
         </p>
       </div>
 
       <WorkoutCatalog />
 
-      <section aria-labelledby="packs-title" className="container-site pt-24 lg:pt-36">
-        <h2 id="packs-title" className="font-display text-h2">
-          Packs
-        </h2>
-        <div className="mt-12">
-          {packs.map((p) => (
-            <PackCard key={p.id} pack={p} workouts={workouts} />
-          ))}
-        </div>
-      </section>
+      {onlinePacks.length > 0 && (
+        <section aria-labelledby="packs-online-title" className="container-site pt-24 lg:pt-36">
+          <h2 id="packs-online-title" className="font-display text-h2">
+            Pack online
+          </h2>
+          <PackGrid packs={onlinePacks} className="mt-12" />
+        </section>
+      )}
 
       <section aria-labelledby="espera-title" className="section-y">
         <div className="container-site">
           <div className="bg-acento-profundo px-6 py-14 text-tiza sm:px-12 lg:grid lg:grid-cols-12 lg:items-center lg:gap-10 lg:px-16 lg:py-20">
             <div className="lg:col-span-6">
               <h2 id="espera-title" className="font-display text-h2 text-balance">
-                ¿Quieres saber cuándo empieza?
+                ¿Quieres saber cuándo empezamos?
               </h2>
-              <p className="mt-5 text-tiza/80">Déjame tu email y te aviso cuando los entrenamientos estén disponibles.</p>
+              <p className="mt-5 text-tiza/80">Déjame tu email y te aviso en cuanto abra las primeras sesiones en directo.</p>
             </div>
             <WaitlistForm tone="dark" className="mt-10 lg:col-span-6 lg:mt-0" />
           </div>

@@ -1,6 +1,6 @@
 import { pending } from "~/lib/pending";
 import { media } from "~/data/media";
-import type { FAQItem, PricingPlan, ProcessStep, Service, Testimonial } from "~/types/content";
+import type { FAQItem, ProcessStep, Service, Testimonial } from "~/types/content";
 
 /*
  * Copy provisional de la home.
@@ -15,9 +15,9 @@ export const hero = {
   role: "Entrenadora personal",
   headline: ["Empieza", "desde donde", "estás."],
   subtitle:
-    "Entrenamiento personal, fuerza funcional y grupos reducidos en mi propia sala. Tu nivel es el punto de partida, no un requisito.",
+    "Entrenamiento personal y grupos reducidos en mi propia sala, y muy pronto online, en directo. Tu nivel es el punto de partida, no un requisito.",
   primaryCta: "Escríbeme",
-  secondaryCta: { label: "Cómo trabajo", anchor: "como-trabajo" },
+  secondaryCta: { label: "Ver los packs", anchor: "packs" },
 };
 
 export const manifesto = {
@@ -87,13 +87,13 @@ export const services: Service[] = [
   },
   {
     id: "online",
-    title: "Entrenamiento online",
+    title: "Entrenamiento online en directo",
     summary:
-      "La misma forma de entrenar, desde casa. Sesiones grabadas de unos 45 minutos, organizadas en packs.",
-    forWhom: "Para quien tiene poco tiempo, prefiere no ir al gimnasio o vive lejos.",
+      "Entrena conmigo en directo desde casa, con corrección y acompañamiento. Y si un día no puedes conectarte, con la sesión grabada.",
+    forWhom: "Para quien tiene el día lleno: trabajo temprano, hijos, horarios imposibles.",
     media: media.online,
     status: "coming-soon",
-    cta: { label: "Apuntarme a la lista de espera", href: "#online" },
+    cta: { label: "Conocer el entrenamiento online", href: "#online" },
   },
 ];
 
@@ -137,43 +137,13 @@ export const studio = {
   ],
 };
 
-export const pricing = {
-  title: "Tarifas",
+/** Cabecera de la sección de packs. Los packs en sí viven en src/data/packs.ts. */
+export const packsIntro = {
+  title: "Elige cómo quieres entrenar conmigo",
   intro:
-    "Estoy terminando de definir las tarifas. Si quieres conocerlas ya, escríbeme y te cuento las opciones.",
-  plans: [
-    {
-      id: "personal",
-      service: "personal",
-      name: "Entrenamiento personal",
-      description: "Sesiones individuales adaptadas a ti.",
-      price: pending("Precio por sesión"),
-      unit: pending("Unidad: sesión, bono o mes"),
-      includes: pending("Qué incluye (duración, seguimiento, plan)"),
-      status: "available",
-    },
-    {
-      id: "grupos",
-      service: "grupos",
-      name: "Grupos reducidos",
-      description: "Entrena en compañía, a tu nivel.",
-      price: pending("Precio por sesión o mensual"),
-      unit: pending("Unidad"),
-      includes: pending("Frecuencia, tamaño del grupo y condiciones"),
-      status: "available",
-    },
-    {
-      id: "online",
-      service: "online",
-      name: "Entrenamiento online",
-      description: "Packs de entrenamientos para hacer en casa.",
-      price: pending("Precio de los packs"),
-      unit: pending("Pago único o suscripción"),
-      includes: pending("Contenido de cada pack"),
-      status: "coming-soon",
-    },
-  ] satisfies PricingPlan[],
-  conditionsNote: pending("Condiciones: IVA, bonos, caducidad, cancelaciones y formas de pago"),
+    "En mi sala o desde casa, cada pack parte de lo mismo: entrenamiento adaptado a ti y acompañamiento de verdad. Elige el que encaje contigo y te cuento cómo empezar.",
+  pricesNote: "Estoy terminando de definir los precios. Escríbeme desde el pack que te interese y te los cuento.",
+  conditionsNote: pending("Condiciones: IVA, validez, cancelaciones y formas de pago"),
 };
 
 /**
@@ -223,10 +193,23 @@ export const faq: FAQItem[] = [
   },
   {
     id: "online",
-    question: "¿Habrá entrenamientos online?",
+    question: "¿Cómo funciona el entrenamiento online?",
     answer:
-      "Sí, están en preparación: vídeos de unos 45 minutos organizados en packs para entrenar desde casa. Si te apuntas a la lista de espera, te aviso cuando estén disponibles.",
-    note: pending("Fecha de lanzamiento, precios y formato de acceso"),
+      "Son sesiones en directo: entreno contigo desde casa, te observo, te corrijo la técnica y te acompaño durante toda la sesión. Estoy terminando de prepararlo; si te interesa, escríbeme y te aviso en cuanto empiece.",
+    note: pending("Horario, sesiones por semana, plataforma y fecha de lanzamiento"),
+  },
+  {
+    id: "grabacion",
+    question: "¿Qué pasa si no puedo conectarme a una sesión en directo?",
+    answer: "Tendrás acceso a la sesión grabada para entrenar cuando encuentres el momento.",
+    note: pending("Duración y tiempo de acceso a las grabaciones"),
+  },
+  {
+    id: "packs",
+    question: "¿Cómo contrato un pack?",
+    answer:
+      "Elige el pack que encaje contigo y escríbeme desde su botón. Te cuento los detalles, resolvemos tus dudas y te explico cómo empezar.",
+    note: pending("Cuando haya pago online: explicar el proceso de compra y el acceso"),
   },
 ];
 

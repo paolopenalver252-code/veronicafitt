@@ -15,7 +15,7 @@ test.describe("Home", () => {
     await page.goto("/");
     await expect(page.locator("h1")).toHaveCount(1);
     await expect(page.locator("h1")).toContainText(/entrenadora personal/i);
-    for (const id of ["inicio", "manifiesto", "sobre-mi", "entrenamientos", "como-trabajo", "sala", "online", "tarifas", "preguntas", "contacto"]) {
+    for (const id of ["inicio", "manifiesto", "sobre-mi", "entrenamientos", "como-trabajo", "sala", "online", "packs", "preguntas", "contacto"]) {
       await expect(page.locator(`#${id}`)).toHaveCount(1);
     }
     await expect(page).toHaveTitle(/Verónica Calabuch/);
@@ -43,9 +43,9 @@ test.describe("Home", () => {
   test("navegación por anclas", async ({ page }, info) => {
     test.skip(isMobile(info.project.name), "En móvil se prueba el menú");
     await page.goto("/");
-    await page.getByRole("navigation", { name: "Principal" }).getByRole("link", { name: "Tarifas" }).click();
-    await expect(page).toHaveURL(/#tarifas$/);
-    await expect(page.locator("#tarifas-title")).toBeInViewport();
+    await page.getByRole("navigation", { name: "Principal" }).getByRole("link", { name: "Packs" }).click();
+    await expect(page).toHaveURL(/#packs$/);
+    await expect(page.locator("#packs-title")).toBeInViewport();
   });
 
   test("menú móvil accesible", async ({ page }, info) => {
@@ -118,10 +118,12 @@ test.describe("Online", () => {
     expect(errors).toEqual([]);
   });
 
-  test("no ofrece compras reales", async ({ page }) => {
+  test("presenta el directo y no ofrece compras reales", async ({ page }) => {
     await page.goto("/online");
+    await expect(page.locator("h1")).toContainText("Entrena conmigo");
+    await expect(page.getByText("No estás siguiendo un vídeo.", { exact: false })).toBeVisible();
+    await expect(page.getByRole("link", { name: /comprar/i })).toHaveCount(0);
     await expect(page.getByRole("button", { name: /comprar/i })).toHaveCount(0);
-    await expect(page.getByText("La compra todavía no está disponible.")).toBeVisible();
   });
 });
 
@@ -142,9 +144,9 @@ test("vista de cliente sin notas internas; ?notas=1 las muestra", async ({ page 
   await expect(page.getByText(/Foto pendiente|Vídeo pendiente/).first()).toBeHidden();
   await expect(page.getByRole("button", { name: "Ocultar notas internas" })).toHaveCount(0);
 
-  await page.goto("/?notas=1#tarifas");
+  await page.goto("/?notas=1#packs");
   await expect(page.locator("html")).toHaveAttribute("data-notes", "on");
-  await expect(page.locator("#tarifas").getByText("Pendiente de confirmar:").first()).toBeVisible();
+  await expect(page.locator("#packs").getByText("Pendiente de confirmar:").first()).toBeVisible();
 
   await page.getByRole("button", { name: "Ocultar notas internas" }).click();
   await expect(page.locator("html")).not.toHaveAttribute("data-notes", "on");
@@ -153,9 +155,9 @@ test("vista de cliente sin notas internas; ?notas=1 las muestra", async ({ page 
 });
 
 test("paleta alternativa para comparar", async ({ page }) => {
-  await page.goto("/?paleta=cobalto");
-  await expect(page.locator("html")).toHaveAttribute("data-palette", "cobalto");
   await page.goto("/?paleta=granate");
+  await expect(page.locator("html")).toHaveAttribute("data-palette", "granate");
+  await page.goto("/?paleta=verde");
   await expect(page.locator("html")).not.toHaveAttribute("data-palette", /.+/);
 });
 
@@ -173,4 +175,34 @@ test.describe("Mobile-first", () => {
       await context.close();
     });
   }
+});
+
+test.describe("Packs", () => {
+  test("la home lista los packs desde los datos, sin pagos simulados", async ({ page }) => {
+    await page.goto("/#packs");
+    const section = page.locator("#packs");
+    await expect(section.getByRole("article")).toHaveCount(3);
+    await expect(section.getByRole("link", { name: "Solicitar este pack" })).toHaveCount(2);
+    await expect(section.getByRole("link", { name: "Avísame cuando empiece" })).toHaveCount(1);
+    await expect(section.getByText(/Comprar pack/)).toHaveCount(0);
+  });
+
+  test("cada ficha de pack existe y su CTA prepara el formulario", async ({ page }) => {
+    for (const slug of ["entrenamiento-personal", "grupos-reducidos", "online-en-directo"]) {
+      const res = await page.goto(`/packs/${slug}`);
+      expect(res?.status()).toBe(200);
+      await expect(page.locator("h1")).toHaveCount(1);
+    }
+    await page.goto("/packs/grupos-reducidos");
+    await page.locator("article").first().getByRole("link", { name: "Solicitar este pack" }).click();
+    await expect(page).toHaveURL(/\/#contacto$/);
+    const form = page.locator("#contacto form");
+    await expect(form.getByLabel("¿Qué te interesa?")).toHaveValue("grupos");
+    await expect(form.getByLabel("Mensaje (opcional)")).toHaveValue(/Grupos reducidos/);
+  });
+
+  test("un pack inexistente muestra la página de error", async ({ page }) => {
+    await page.goto("/packs/no-existe");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Esta página no existe.");
+  });
 });

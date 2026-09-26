@@ -70,12 +70,12 @@ export const media = {
   online: {
     id: "online",
     kind: "video",
-    src: pending("Vídeo de Verónica entrenando, distinto al del hero (16:9 ideal)"),
+    src: pending("Vídeo de Verónica en una sesión online en directo, frente a cámara (16:9)"),
     poster: pending("Fotograma del vídeo online"),
     width: 1920,
     height: 1080,
     alt: "Verónica entrenando frente a cámara",
-    brief: "Verónica entrenando frente a cámara, en horizontal: así se verán los futuros vídeos.",
+    brief: "Verónica guiando una sesión online en directo frente a cámara, en horizontal.",
   },
   studio: {
     id: "studio",
@@ -112,6 +112,33 @@ export const media = {
     height: 1500,
     alt: "Verónica Calabuch sonriendo en su sala",
     brief: "Foto cercana y cálida: sonrisa, gesto de bienvenida.",
+  },
+  packPersonal: {
+    id: "pack-personal",
+    kind: "image",
+    src: pending("Foto para el pack de entrenamiento personal (4:5)"),
+    width: 1200,
+    height: 1500,
+    alt: "Verónica durante una sesión de entrenamiento personal",
+    brief: "Verónica con una persona en sesión individual, en la sala.",
+  },
+  packGrupos: {
+    id: "pack-grupos",
+    kind: "image",
+    src: pending("Foto para el pack de grupos reducidos (4:5)"),
+    width: 1200,
+    height: 1500,
+    alt: "Entrenamiento en grupo reducido con Verónica",
+    brief: "Grupo reducido entrenando con Verónica. Con consentimiento de imagen.",
+  },
+  packOnline: {
+    id: "pack-online",
+    kind: "image",
+    src: pending("Foto para el pack online (4:5): Verónica frente a cámara"),
+    width: 1200,
+    height: 1500,
+    alt: "Verónica entrenando frente a la cámara en una sesión online",
+    brief: "Verónica entrenando frente a la cámara, como en una sesión en directo.",
   },
 } satisfies Record<string, MediaSlot>;
 

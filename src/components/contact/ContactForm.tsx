@@ -31,7 +31,13 @@ export function ContactForm() {
 
   // Si la persona llega desde un servicio concreto, se preselecciona.
   useEffect(() => {
-    if (intent) setValues((v) => ({ ...v, service: intent }));
+    if (!intent) return;
+    setValues((v) => ({
+      ...v,
+      service: intent.service,
+      // Si viene de un pack y aún no ha escrito nada, se deja el mensaje empezado.
+      message: intent.pack && !v.message ? `Me interesa el pack «${intent.pack}».` : v.message,
+    }));
   }, [intent]);
 
   const set = <K extends keyof ContactInput>(key: K, value: ContactInput[K]) => {

@@ -22,7 +22,7 @@ export const serviceOptions = [
   { value: "personal", label: "Entrenamiento personal" },
   { value: "funcional", label: "Fuerza funcional" },
   { value: "grupos", label: "Grupos reducidos" },
-  { value: "online", label: "Entrenamiento online (lista de espera)" },
+  { value: "online", label: "Entrenamiento online en directo" },
   { value: "no-lo-se", label: "Todavía no lo sé" },
 ] as const;
 

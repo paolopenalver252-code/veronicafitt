@@ -1,23 +1,54 @@
 import { pending } from "~/lib/pending";
 import { workoutThumb } from "~/data/media";
-import type { Level, Pack, Workout, WorkoutCategory } from "~/types/content";
+import type { Level, Workout, WorkoutCategory } from "~/types/content";
 
 /*
- * TODO ESTE ARCHIVO ES DE EJEMPLO.
- * Verónica todavía no ha definido categorías, entrenamientos ni packs.
- * Sirve para demostrar la arquitectura de la futura plataforma; cada elemento
- * lleva `isExample: true` y se muestra con la etiqueta "Ejemplo".
+ * ENTRENAMIENTO ONLINE EN DIRECTO (nuevo servicio de Verónica)
+ * Confirmado: sesiones en directo en las que entrena con los clientes, corrige
+ * la técnica, motiva y acompaña; y grabaciones para quien no pueda conectarse.
+ * Pendiente (no inventar): precio, horarios, sesiones por semana, plataforma,
+ * duración de las grabaciones y sistema de membresía.
  */
-
-export const onlineIntro = {
-  status: "En preparación",
-  title: "Entrena donde quieras.",
-  subtitle: ["La misma forma de entrenar.", "Ahora, estés donde estés."],
-  body: "Estoy preparando entrenamientos grabados de unos 45 minutos, organizados en packs, para que puedas entrenar desde casa, a tu ritmo y cuando te venga bien.",
-  audience: ["Si tienes poco tiempo", "Si prefieres no ir al gimnasio", "Si buscas flexibilidad"],
-  launchNote: pending("Fecha aproximada de lanzamiento del online"),
-  formatNote: pending("Formato de acceso, precios y si habrá pago único o suscripción"),
+export const liveTraining = {
+  /** "coming-soon" mientras no haya fecha ni condiciones; "available" al lanzarlo. */
+  status: "coming-soon" as "available" | "coming-soon",
+  title: "Entrena conmigo, estés donde estés.",
+  lead: "Entrenamientos online en directo para que puedas cuidarte aunque el trabajo, los hijos o la falta de tiempo no te dejen ir al gimnasio.",
+  difference: ["No estás siguiendo un vídeo.", "Estoy contigo."],
+  pillars: [
+    { title: "En directo conmigo", body: "Entrenamos a la vez. Te veo, te hablo y te corrijo durante la sesión." },
+    { title: "Técnica", body: "Observo cómo haces cada ejercicio y te ayudo a hacerlo bien, a tu nivel." },
+    { title: "Motivación", body: "No entrenas a solas frente a una pantalla. Estoy ahí para acompañarte y ayudarte a ser constante." },
+    { title: "¿No puedes conectarte?", body: "Tendrás la sesión grabada para entrenar cuando encuentres el momento." },
+  ],
+  audienceTitle: "Pensado para ti si…",
+  audience: [
+    "Empiezas a trabajar temprano y no llegas al gimnasio.",
+    "Tienes hijos y el tiempo libre no te cuadra con ningún horario.",
+    "Prefieres entrenar en casa, pero con alguien que te guíe.",
+    "Te cuesta ser constante cuando entrenas por tu cuenta.",
+  ],
+  steps: [
+    { title: "Te conectas", body: "Entras a la sesión en directo desde casa, con lo que necesites a mano." },
+    { title: "Entrenamos a la vez", body: "Hacemos la sesión en directo: te guío, te observo y te corrijo." },
+    { title: "Si no llegas, la grabación", body: "Cuando no puedas conectarte, entrenas con la sesión grabada." },
+  ],
+  cta: "Quiero entrenar online",
+  notes: [
+    pending("Horario de los directos (idea inicial de Verónica: primera hora, sobre las 6:00)"),
+    pending("Número de sesiones por semana"),
+    pending("Plataforma de los directos"),
+    pending("Duración y tiempo de acceso a las grabaciones"),
+    pending("Precio y sistema de membresía"),
+    pending("Fecha de lanzamiento"),
+  ],
 };
+
+/*
+ * BIBLIOTECA DE SESIONES GRABADAS: TODO LO QUE SIGUE ES DE EJEMPLO.
+ * Muestra cómo podrán organizarse las grabaciones (categorías, duración,
+ * nivel). Cada elemento lleva `isExample: true`.
+ */
 
 export const levelLabel: Record<Level, string> = {
   inicial: "Inicial",
@@ -137,25 +168,6 @@ export const workouts: Workout[] = [
     goal: "Fuerza y resistencia",
     equipment: ["Mancuernas", "Banda elástica"],
   }),
-];
-
-export const packs: Pack[] = [
-  {
-    id: "p1",
-    slug: "empieza-en-casa",
-    name: "Empieza en casa",
-    hook: "Un primer pack para crear el hábito de entrenar desde casa, a tu ritmo.",
-    workoutIds: ["w1", "w2", "w4"],
-    sessionMinutes: "30–45 min",
-    level: "Inicial",
-    weeks: 4,
-    sessionsPerWeek: 2,
-    equipment: ["Sin material", "Mancuernas opcionales"],
-    price: pending("Precio del pack"),
-    expires: pending("¿El acceso caduca?"),
-    status: "coming-soon",
-    isExample: true,
-  },
 ];
 
 export const durationFilters = [

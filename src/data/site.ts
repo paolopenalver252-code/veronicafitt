@@ -30,9 +30,9 @@ export const site = {
 
 export const navItems: NavItem[] = [
   { label: "Sobre mí", anchor: "sobre-mi" },
-  { label: "Entrenamientos", anchor: "entrenamientos" },
-  { label: "Cómo trabajo", anchor: "como-trabajo" },
+  { label: "Presencial", anchor: "entrenamientos" },
   { label: "Online", anchor: "online" },
-  { label: "Tarifas", anchor: "tarifas" },
+  { label: "Packs", anchor: "packs" },
+  { label: "Cómo trabajo", anchor: "como-trabajo" },
   { label: "Preguntas", anchor: "preguntas" },
 ];

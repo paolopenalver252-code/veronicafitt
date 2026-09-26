@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 /*
- * Sistema visual de Verónica Calabuch, dirección v2: elegante, sutil, bonito, con fuerza.
+ * Sistema visual de Verónica Calabuch: elegante, natural, cercano, con fuerza.
  * La fuerza viene de la tipografía, la escala y la fotografía; no del color.
- * PALETA PROVISIONAL hasta tener sus fotos: todos los colores se cambian aquí.
+ * Paleta pedida por Verónica (neutros, verde, blanco roto, beige), elegida para
+ * armonizar con la piel y la luz natural. Validar con sus fotos: se cambia aquí.
  */
 
 /* Titulares: Didone con tamaño óptico (trazos finos a gran escala, más robusta en pequeño). */
@@ -54,24 +55,25 @@
   --color-transparent: transparent;
   --color-current: currentColor;
 
-  /* Neutros: fríos a propósito (ni crema ni beige). */
-  --color-tiza: #f1f0ed;
-  --color-tiza-deep: #e6e3de;
-  --color-arena: #d6d0c7;
-  --color-blanco: #ffffff;
-  --color-grafito: #262223;
-  --color-grafito-soft: #3a3536;
-  --color-piedra: #625c5b;
-  --color-piedra-light: #aaa49e;
-  --color-linea: #d9d5cf;
-  --color-linea-dark: #5a4a4d;
+  /* Neutros: blanco roto y beige gris (greige), nunca amarillos. */
+  --color-tiza: #f4f2ed;
+  --color-tiza-deep: #eae5dc;
+  --color-arena: #d9d0c3;
+  --color-blanco: #fdfcfa;
+  --color-grafito: #2b2b27;
+  --color-grafito-soft: #3d3d37;
+  --color-piedra: #66625a;
+  --color-piedra-light: #aca69b;
+  --color-linea: #ddd7cc;
+  --color-linea-dark: #4d5a4f;
 
-  /* Acento único: granate apagado. Elegancia y fuerza sin agresividad. */
-  --color-acento: #7b2432;
-  --color-acento-hover: #621a27;
-  --color-acento-profundo: #4a1420;
-  --color-acento-claro: #ecbcc3;
-  --color-acento-suave: #f2e6e7;
+  /* Acento: verde salvia profundo y desaturado. Casi complementario de la piel:
+     la hace resaltar sin competir. Nada de verde de gimnasio. */
+  --color-acento: #48584a;
+  --color-acento-hover: #3a483c;
+  --color-acento-profundo: #2f3b31;
+  --color-acento-claro: #c7d1c0;
+  --color-acento-suave: #e3e7de;
 
   --color-error: #b3261e;
   --color-error-light: #f7c3bf;
@@ -108,7 +110,7 @@
   --radius-card: 6px;
   --radius-field: 6px;
 
-  --shadow-float: 0 12px 32px -16px rgb(38 34 35 / 0.28);
+  --shadow-float: 0 12px 32px -16px rgb(43 43 39 / 0.28);
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
@@ -119,13 +121,13 @@
   --breakpoint-xs: 26rem;
 }
 
-/* Paleta alternativa para comparar con Verónica: añadir ?paleta=cobalto a la URL. */
-html[data-palette="cobalto"] {
-  --color-acento: #2e44c8;
-  --color-acento-hover: #2335a6;
-  --color-acento-profundo: #18236b;
-  --color-acento-claro: #b7c1f4;
-  --color-acento-suave: #e3e7f7;
+/* Paleta anterior para comparar: añadir ?paleta=granate a la URL (?paleta=verde vuelve). */
+html[data-palette="granate"] {
+  --color-acento: #7b2432;
+  --color-acento-hover: #621a27;
+  --color-acento-profundo: #4a1420;
+  --color-acento-claro: #ecbcc3;
+  --color-acento-suave: #f2e6e7;
 }
 
 /* ---------- Base ---------- */

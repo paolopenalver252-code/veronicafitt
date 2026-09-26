@@ -1,3 +1,4 @@
+import type { PackSlug } from "~/data/pack-slugs";
 import type { Maybe } from "~/lib/pending";
 
 /** Estado de publicación de cualquier pieza de contenido. */
@@ -49,17 +50,6 @@ export type FAQItem = {
   note?: Maybe<string>;
 };
 
-export type PricingPlan = {
-  id: string;
-  service: ServiceId;
-  name: string;
-  description: string;
-  price: Maybe<string>;
-  unit: Maybe<string>;
-  includes: Maybe<string[]>;
-  status: ContentStatus;
-};
-
 export type Testimonial = {
   id: string;
   quote: string;
@@ -107,21 +97,41 @@ export type Workout = {
   isExample: boolean;
 };
 
+/* ---------- Packs (venta) ---------- */
+
+/**
+ * Cómo se compra un pack. Permite pasar de "se solicita por contacto" a un
+ * enlace de pago o a un checkout propio sin tocar la interfaz.
+ */
+export type PackPurchase =
+  /** Hoy: el botón abre WhatsApp o el formulario con el pack indicado. */
+  | { type: "contact" }
+  /** Enlace de pago externo (p. ej. Stripe Payment Link). */
+  | { type: "external"; url: string }
+  /** Futuro: checkout propio (Stripe Checkout + acceso). */
+  | { type: "checkout"; priceId: string };
+
 export type Pack = {
   id: string;
-  slug: string;
+  slug: PackSlug;
+  /** Nombre comercial del pack. */
   name: string;
-  hook: string;
-  workoutIds: string[];
-  sessionMinutes: string;
-  level: string;
-  weeks?: number;
-  sessionsPerWeek?: number;
-  equipment: string[];
+  /** Vía a la que pertenece: se muestra como etiqueta discreta. */
+  channel: "Presencial" | "Online";
+  service: ServiceId;
+  summary: string;
+  description: string;
+  includes: Maybe<string[]>;
   price: Maybe<string>;
-  expires: Maybe<boolean>;
+  /** Unidad o condición del precio ("/ mes", "bono de 10 sesiones"…). */
+  priceNote?: Maybe<string>;
+  media: MediaSlot;
+  /** Información adicional: duración, validez, plazas… */
+  details: Array<{ label: string; value: Maybe<string> }>;
+  purchase: PackPurchase;
   status: ContentStatus;
-  isExample: boolean;
+  /** Notas internas: qué falta para publicar el pack. */
+  notes?: Maybe<string>[];
 };
 
 export type NavItem = { label: string; anchor: string };

@@ -1,4 +1,5 @@
 import type { Config } from "@react-router/dev/config";
+import { packSlugs } from "./src/data/pack-slugs";
 
 /**
  * Web estática prerenderizada: cada ruta pública se genera como HTML en build
@@ -8,5 +9,13 @@ import type { Config } from "@react-router/dev/config";
 export default {
   appDirectory: "src",
   ssr: false,
-  prerender: ["/", "/online", "/aviso-legal", "/privacidad", "/cookies", "/404"],
+  prerender: [
+    "/",
+    "/online",
+    ...packSlugs.map((slug) => `/packs/${slug}`),
+    "/aviso-legal",
+    "/privacidad",
+    "/cookies",
+    "/404",
+  ],
 } satisfies Config;

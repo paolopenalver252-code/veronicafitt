@@ -23,9 +23,9 @@ export function Services() {
   return (
     <section id="entrenamientos" aria-labelledby="entrenamientos-title" className="section-y">
       <div className="container-site">
-        <p className="label text-acento">Entrenamientos</p>
+        <p className="label text-acento">Presencial</p>
         <h2 id="entrenamientos-title" className="font-display mt-5 max-w-[16ch] text-h2 text-balance">
-          Cómo puedes entrenar conmigo
+          Entrena conmigo en la sala
         </h2>
       </div>
 

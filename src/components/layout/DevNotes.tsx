@@ -5,13 +5,13 @@ import { site } from "~/data/site";
 /**
  * Script en <head> (solo demo). Se ejecuta antes de pintar:
  * - ?notas=1 / ?notas=0 activa o desactiva las notas internas (se recuerda).
- * - ?paleta=cobalto / ?paleta=granate cambia el color de acento para comparar.
+ * - ?paleta=granate / ?paleta=verde cambia el color de acento para comparar.
  */
 export const devScript = `try{var q=new URLSearchParams(location.search),s=localStorage,d=document.documentElement;
 var n=q.get("notas");if(n!==null)s.setItem("vc-notas",n==="1"?"on":"off");
 var p=q.get("paleta");if(p!==null)s.setItem("vc-paleta",p);
 if(s.getItem("vc-notas")==="on")d.dataset.notes="on";
-var c=s.getItem("vc-paleta");if(c&&c!=="granate")d.dataset.palette=c}catch(e){}`;
+var c=s.getItem("vc-paleta");if(c&&c!=="verde")d.dataset.palette=c}catch(e){}`;
 
 /** Aviso flotante visible solo cuando las notas internas están activas, para poder salir. */
 export function DevNotesBadge() {
