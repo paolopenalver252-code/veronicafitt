@@ -35,11 +35,13 @@ export const media = {
   about: {
     id: "about",
     kind: "image",
-    src: pending("Retrato cercano de Verónica (4:5, ≥ 1200 px)"),
-    width: 1200,
-    height: 1500,
-    alt: "Retrato de Verónica Calabuch",
-    focal: "50% 30%",
+    // Provisional: captura de 419×554 px. Sustituir por el original (≥ 1200 px de ancho) con el mismo nombre.
+    src: "/assets/veronica/about/veronica-sobre-mi.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/about/veronica-sobre-mi.webp" }],
+    width: 419,
+    height: 554,
+    alt: "Verónica Calabuch sonriendo durante un entrenamiento al aire libre, al atardecer",
+    focal: "58% 22%",
     brief: "Retrato cercano, mirada a cámara, luz natural. Transmite personalidad.",
   },
   aboutDetail: {
