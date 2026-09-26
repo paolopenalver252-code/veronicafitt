@@ -206,3 +206,65 @@ test.describe("Packs", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Esta página no existe.");
   });
 });
+
+test.describe("Hero con vídeo de fondo", () => {
+  for (const [label, width, height] of [["escritorio", 1440, 900], ["tablet", 820, 1180]] as const) {
+    test(`${label}: fondo a pantalla completa, con alternativa visible y CTA legible`, async ({ browser }) => {
+      const context = await browser.newContext({ viewport: { width, height } });
+      const page = await context.newPage();
+      await page.goto("/");
+      const media = page.locator("[data-hero-media]");
+      const box = await media.boundingBox();
+      expect(Math.round(box!.width)).toBe(width);
+      // Sin vídeo todavía: se ve el póster o el hueco reservado, nunca un vacío.
+      await expect(media.locator('img, [role="img"]').filter({ visible: true })).toHaveCount(1);
+      await expect(page.locator("#inicio").getByRole("link", { name: "Escríbeme" })).toBeInViewport();
+      await context.close();
+    });
+  }
+
+  test("móvil: solo imagen, nunca un elemento de vídeo", async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    const page = await context.newPage();
+    await page.goto("/", { waitUntil: "networkidle" });
+    await expect(page.locator("[data-hero-media] video")).toHaveCount(0);
+    await expect(page.locator("[data-hero-media]").locator('img, [role="img"]').filter({ visible: true })).toHaveCount(1);
+    await context.close();
+  });
+});
+
+test("sin scroll horizontal en móvil, tablet y escritorio", async ({ browser }) => {
+  for (const width of [375, 820, 1440]) {
+    const context = await browser.newContext({ viewport: { width, height: 900 } });
+    const page = await context.newPage();
+    for (const path of ["/", "/online", "/packs/online-en-directo"]) {
+      await page.goto(path);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow, `${path} a ${width}px`).toBe(0);
+    }
+    await context.close();
+  }
+});
+
+test.describe("Online → Packs", () => {
+  test("la sesión en directo se explica y lleva a los packs", async ({ page }) => {
+    await page.goto("/#online");
+    const section = page.locator("#online");
+    await expect(section.getByText("En directo", { exact: true }).first()).toBeVisible();
+    await expect(section.locator("ol > li")).toHaveCount(4);
+    await expect(section.getByText("Estás entrenando conmigo.", { exact: false })).toBeVisible();
+    await section.getByRole("link", { name: "Ver los packs" }).click();
+    await expect(page).toHaveURL(/#packs$/);
+    await expect(page.locator("#packs-title")).toBeInViewport();
+  });
+
+  test("cada pack muestra para quién es antes del precio", async ({ page }) => {
+    await page.goto("/#packs");
+    const cards = page.locator("#packs article");
+    for (let i = 0; i < 3; i++) {
+      await expect(cards.nth(i).getByText("Para quién")).toBeVisible();
+      await expect(cards.nth(i).getByText("Precio", { exact: true })).toBeVisible();
+    }
+    await expect(cards.nth(2).getByText("Online en directo", { exact: true })).toBeVisible();
+  });
+});

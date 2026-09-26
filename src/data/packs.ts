@@ -10,8 +10,13 @@ import type { Pack } from "~/types/content";
  * tres servicios confirmados; lo que "incluye" describe el servicio confirmado,
  * no cantidades. Nombre comercial, precio, nº de sesiones y validez: pendientes.
  *
- * Para vender un pack con enlace de pago, cambiar `purchase` por
- * { type: "external", url: "https://…" }: el botón pasa a "Comprar pack".
+ * Cómo se compra cada pack (`purchase`), sin tocar la interfaz:
+ *   { type: "contact" }             → "Solicitar este pack": WhatsApp (si está configurado) o formulario, con el pack indicado. Hoy.
+ *   { type: "external", url: "…" }  → "Comprar pack": Stripe Payment Link u otro checkout externo.
+ *   { type: "checkout", priceId }   → reservado para un checkout propio (Stripe Checkout + acceso).
+ *
+ * Para añadir un pack (pack 1, 2, 3, presencial, online…): añadir su objeto aquí
+ * y su slug en pack-slugs.ts. La sección, la rejilla y la ficha se generan solas.
  */
 export const packs: Pack[] = [
   {
@@ -21,6 +26,7 @@ export const packs: Pack[] = [
     channel: "Presencial",
     service: "personal",
     summary: "Sesiones individuales en mi sala, con toda la atención puesta en ti.",
+    forWhom: "Para empezar con seguridad o avanzar con un plan hecho a tu medida.",
     description:
       "Entrenamos uno a uno en mi sala. Partimos de tu nivel y de cómo te mueves, tenemos en cuenta cualquier lesión o limitación y ajustamos cada ejercicio a tu ritmo.",
     includes: [
@@ -28,14 +34,14 @@ export const packs: Pack[] = [
       "Entrenamiento adaptado a tu nivel y a tu ritmo",
       "Atención a lesiones y limitaciones",
     ],
+    duration: pending("Duración o validez del pack de entrenamiento personal (sesiones, semanas o meses)"),
     price: pending("Precio del pack de entrenamiento personal"),
     priceNote: pending("Unidad del precio: sesión, bono o mes"),
     media: media.packPersonal,
     details: [
       { label: "Dónde", value: "En la sala (aprox. 45 m²)" },
       { label: "Sesiones", value: pending("Número de sesiones del pack") },
-      { label: "Duración", value: pending("Duración de cada sesión") },
-      { label: "Validez", value: pending("Validez del pack") },
+      { label: "Cada sesión", value: pending("Duración de cada sesión") },
     ],
     purchase: { type: "contact" },
     status: "available",
@@ -48,6 +54,7 @@ export const packs: Pack[] = [
     channel: "Presencial",
     service: "grupos",
     summary: "Entrena en compañía sin perder la atención personal.",
+    forWhom: "Para quien disfruta entrenando con otras personas y quiere seguir teniendo corrección.",
     description:
       "Grupos pequeños en mi sala, donde cada persona trabaja a su nivel. Tienes el ambiente de entrenar con otras personas y la atención de entrenar conmigo.",
     includes: [
@@ -55,6 +62,7 @@ export const packs: Pack[] = [
       "Cada persona trabaja a su nivel",
       "Atención personal dentro del grupo",
     ],
+    duration: pending("Duración o validez del pack de grupos reducidos"),
     price: pending("Precio del pack de grupos reducidos"),
     priceNote: pending("Unidad del precio: sesión, bono o mes"),
     media: media.packGrupos,
@@ -62,7 +70,6 @@ export const packs: Pack[] = [
       { label: "Dónde", value: "En la sala (aprox. 45 m²)" },
       { label: "Plazas por grupo", value: pending("Número máximo de personas por grupo") },
       { label: "Horarios", value: pending("Horarios de los grupos") },
-      { label: "Validez", value: pending("Validez del pack") },
     ],
     purchase: { type: "contact" },
     status: "available",
@@ -75,6 +82,7 @@ export const packs: Pack[] = [
     channel: "Online",
     service: "online",
     summary: "Entrena conmigo en directo desde casa. Y si no puedes conectarte, con la grabación.",
+    forWhom: "Para quien tiene el día lleno: trabajo temprano, hijos, horarios imposibles.",
     description:
       "Sesiones en directo en las que entreno contigo, te corrijo la técnica y te acompaño. Pensado para quien tiene el día lleno: trabajo, hijos, horarios. Si un día no puedes conectarte, tienes la sesión grabada.",
     includes: [
@@ -82,6 +90,7 @@ export const packs: Pack[] = [
       "Corrección de la técnica durante la sesión",
       "Acceso a las sesiones grabadas",
     ],
+    duration: pending("Duración del pack online (p. ej. mensual)"),
     price: pending("Precio del entrenamiento online"),
     priceNote: pending("Modelo: mensual, bono o membresía"),
     media: media.packOnline,

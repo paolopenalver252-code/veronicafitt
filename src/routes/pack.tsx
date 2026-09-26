@@ -5,6 +5,7 @@ import NotFound from "./not-found";
 import { ContactCta } from "~/components/contact/ContactIntent";
 import { Media } from "~/components/media/Media";
 import { FadeIn, ImageReveal } from "~/components/motion/Reveal";
+import { LiveBadge } from "~/components/online/LiveBadge";
 import { PackGrid } from "~/components/packs/PackGrid";
 import { priceLabel, PurchaseButton } from "~/components/packs/PurchaseButton";
 import { textLinkClasses } from "~/components/ui/Button";
@@ -53,7 +54,11 @@ export default function PackPage() {
   const includes = resolved(pack.includes);
   const price = resolved(pack.price);
   const priceNote = pack.priceNote ? resolved(pack.priceNote) : null;
-  const details = pack.details.filter((d) => !isPending(d.value));
+  const duration = pack.duration ? resolved(pack.duration) : null;
+  const details = [
+    ...(duration ? [{ label: "Duración", value: duration }] : []),
+    ...pack.details.filter((d) => !isPending(d.value)),
+  ];
   const others = packs.filter((p) => p.id !== pack.id && p.status !== "draft");
 
   return (
@@ -73,11 +78,20 @@ export default function PackPage() {
 
           <div className="px-5 pt-10 md:px-10 lg:col-span-5 lg:col-start-8 lg:px-0 lg:pt-4">
             <div className="flex flex-wrap items-center gap-3">
-              <p className="label text-acento">Pack {pack.channel.toLowerCase()}</p>
+              {pack.channel === "Online" ? (
+                <LiveBadge pulse tone="soft">Pack online en directo</LiveBadge>
+              ) : (
+                <p className="label text-acento">Pack {pack.channel.toLowerCase()}</p>
+              )}
               {pack.status === "coming-soon" && <StatusTag tone="soon">Próximamente</StatusTag>}
             </div>
             <h1 className="font-display mt-5 text-h2 text-balance">{pack.name}</h1>
             <p className="mt-6 text-lead text-pretty">{pack.description}</p>
+
+            <p className="mt-8 border-l-2 border-acento-claro pl-4 text-pretty">
+              <span className="label block">Para quién</span>
+              <span className="mt-1 block">{pack.forWhom}</span>
+            </p>
 
             {includes && (
               <>
@@ -122,6 +136,7 @@ export default function PackPage() {
             <div className="mt-6 flex flex-col items-start gap-2">
               <DevNote value={pack.price} />
               {pack.priceNote && <DevNote value={pack.priceNote} />}
+              {pack.duration && <DevNote value={pack.duration} />}
               <DevNote value={pack.includes} />
               {pack.details.map((d) => (
                 <DevNote key={d.label} value={d.value} />

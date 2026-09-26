@@ -24,6 +24,26 @@ export type MediaSlot = {
   brief: string;
 };
 
+/**
+ * Fondo del hero. Tablet y escritorio: vídeo a pantalla completa (con su
+ * fotograma como póster y como alternativa si no carga). Móvil: solo imagen,
+ * nunca se descarga el vídeo.
+ */
+export type HeroBackground = {
+  /** Vídeo horizontal 16:9 para escritorio (y tablet si no hay versión vertical). */
+  video: Maybe<string>;
+  /** Opcional: versión vertical del mismo vídeo para tablet en vertical. */
+  videoPortrait?: Maybe<string>;
+  /** Fotograma horizontal del vídeo: se ve al instante y queda si el vídeo no puede reproducirse. */
+  poster: Maybe<string>;
+  /** Foto vertical de la misma escena para móvil. */
+  posterMobile: Maybe<string>;
+  /** object-position por tamaño, para que el recorte no corte a Verónica. */
+  focal: { mobile: string; tablet: string; desktop: string };
+  alt: string;
+  brief: string;
+};
+
 export type ServiceId = "personal" | "funcional" | "grupos" | "online";
 
 export type Service = {
@@ -120,8 +140,12 @@ export type Pack = {
   channel: "Presencial" | "Online";
   service: ServiceId;
   summary: string;
+  /** Para quién es: ayuda a elegir antes de llegar al precio. */
+  forWhom: string;
   description: string;
   includes: Maybe<string[]>;
+  /** Duración o validez del pack ("4 semanas", "10 sesiones"…). */
+  duration?: Maybe<string>;
   price: Maybe<string>;
   /** Unidad o condición del precio ("/ mes", "bono de 10 sesiones"…). */
   priceNote?: Maybe<string>;

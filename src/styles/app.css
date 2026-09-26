@@ -239,6 +239,52 @@ html[data-palette="granate"] {
   text-wrap: pretty;
 }
 
+/* ---------- Hero: velo sobre el vídeo ----------
+ * Claro, no oscuro: funde el fondo en el blanco roto por el lado del texto,
+ * que sigue en grafito. Tablet: de abajo arriba (el texto va abajo).
+ * Escritorio: de izquierda a derecha (Verónica queda limpia a la derecha).
+ */
+.hero-veil {
+  background: linear-gradient(
+    0deg,
+    var(--color-tiza) 0%,
+    color-mix(in oklab, var(--color-tiza) 90%, transparent) 36%,
+    color-mix(in oklab, var(--color-tiza) 40%, transparent) 56%,
+    transparent 72%
+  );
+}
+
+@media (width >= 64rem) {
+  .hero-veil {
+    background:
+      linear-gradient(
+        90deg,
+        var(--color-tiza) 0%,
+        color-mix(in oklab, var(--color-tiza) 92%, transparent) 30%,
+        color-mix(in oklab, var(--color-tiza) 45%, transparent) 50%,
+        transparent 66%
+      ),
+      linear-gradient(0deg, color-mix(in oklab, var(--color-tiza) 55%, transparent) 0%, transparent 22%);
+  }
+}
+
+/* ---------- "En directo": el punto late unas pocas veces al aparecer y se queda quieto ---------- */
+@keyframes live-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  80%,
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.live-ping {
+  animation: live-ping 2.2s var(--ease-out-soft) 3;
+}
+
 /* ---------- Animación: accesibilidad y robustez ---------- */
 
 @media (prefers-reduced-motion: reduce) {

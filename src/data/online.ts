@@ -1,4 +1,4 @@
-import { pending } from "~/lib/pending";
+import { pending, type Maybe } from "~/lib/pending";
 import { workoutThumb } from "~/data/media";
 import type { Level, Workout, WorkoutCategory } from "~/types/content";
 
@@ -13,19 +13,28 @@ export const liveTraining = {
   /** "coming-soon" mientras no haya fecha ni condiciones; "available" al lanzarlo. */
   status: "coming-soon" as "available" | "coming-soon",
   title: "Entrena conmigo, estés donde estés.",
-  lead: "Entrenamientos online en directo para que puedas cuidarte aunque el trabajo, los hijos o la falta de tiempo no te dejen ir al gimnasio.",
-  difference: ["No estás siguiendo un vídeo.", "Estoy contigo."],
+  lead: "Entrenamientos online en directo para que puedas entrenar conmigo aunque el trabajo, los hijos o la falta de tiempo te impidan ir al gimnasio.",
+  difference: ["No estás siguiendo un vídeo.", "Estás entrenando conmigo."],
   pillars: [
-    { title: "En directo conmigo", body: "Entrenamos a la vez. Te veo, te hablo y te corrijo durante la sesión." },
-    { title: "Técnica", body: "Observo cómo haces cada ejercicio y te ayudo a hacerlo bien, a tu nivel." },
-    { title: "Motivación", body: "No entrenas a solas frente a una pantalla. Estoy ahí para acompañarte y ayudarte a ser constante." },
-    { title: "¿No puedes conectarte?", body: "Tendrás la sesión grabada para entrenar cuando encuentres el momento." },
+    { title: "En directo", body: "Entrenas conmigo en tiempo real y recibes correcciones durante la sesión." },
+    { title: "Corrección", body: "Te observo y te ayudo a hacer cada ejercicio correctamente, a tu nivel." },
+    { title: "Motivación", body: "No entrenas a solas frente a una pantalla. Estoy contigo durante toda la sesión." },
+    { title: "Si no puedes conectarte", body: "Tendrás acceso a la sesión grabada para entrenar cuando tengas tiempo." },
   ],
+  /** Elementos del marco de la sesión en directo (la foto de Verónica "en pantalla"). */
+  session: {
+    trainer: "Verónica",
+    you: "Tú, desde casa",
+    /** Solo se muestra cuando esté confirmado (p. ej. "6:00"). */
+    time: pending(
+      "Hora de los directos para el marco de la sesión (idea inicial: primera hora, sobre las 6:00)",
+    ) as Maybe<string>,
+  },
   audienceTitle: "Pensado para ti si…",
   audience: [
     "Empiezas a trabajar temprano y no llegas al gimnasio.",
     "Tienes hijos y el tiempo libre no te cuadra con ningún horario.",
-    "Prefieres entrenar en casa, pero con alguien que te guíe.",
+    "No puedes desplazarte, o prefieres entrenar en casa con alguien que te guíe.",
     "Te cuesta ser constante cuando entrenas por tu cuenta.",
   ],
   steps: [

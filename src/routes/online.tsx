@@ -2,16 +2,14 @@ import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
 import type { Route } from "./+types/online";
 import { ContactCta } from "~/components/contact/ContactIntent";
-import { Media } from "~/components/media/Media";
-import { FadeIn, ScrollSettle } from "~/components/motion/Reveal";
+import { FadeIn } from "~/components/motion/Reveal";
 import { RevealLines } from "~/components/motion/RevealLines";
 import { WaitlistForm } from "~/components/online/WaitlistForm";
 import { WorkoutCatalog } from "~/components/online/WorkoutCatalog";
 import { PackGrid } from "~/components/packs/PackGrid";
-import { OnlineAudience, OnlineDifference, OnlinePillars } from "~/components/sections/OnlineTraining";
+import { OnlineAudience, OnlineDifference, OnlinePillars, OnlineSessionFrame } from "~/components/sections/OnlineTraining";
 import { DevNote } from "~/components/ui/Pending";
 import { StatusTag } from "~/components/ui/StatusTag";
-import { media } from "~/data/media";
 import { liveTraining } from "~/data/online";
 import { packs } from "~/data/packs";
 import { buildMeta } from "~/lib/seo";
@@ -58,15 +56,13 @@ export default function Online() {
         </div>
 
         <div className="mt-14 lg:container-site lg:mt-20">
-          <ScrollSettle className="aspect-[4/5] sm:aspect-video">
-            <Media slot={media.online} tone="deep" priority sizes="(min-width: 1024px) 84rem, 100vw" />
-          </ScrollSettle>
+          <OnlineSessionFrame priority className="lg:mx-auto lg:max-w-3xl" />
         </div>
       </section>
 
       <section aria-label="Qué lo hace diferente" className="container-site pt-20 lg:pt-32">
-        <OnlineDifference />
-        <OnlinePillars className="mt-16 lg:mt-24" />
+        <OnlineDifference size="lg" />
+        <OnlinePillars layout="grid" className="mt-16 lg:mt-24" />
       </section>
 
       <section aria-labelledby="sesion-title" className="container-site pt-24 lg:pt-36">

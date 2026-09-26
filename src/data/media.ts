@@ -1,5 +1,5 @@
 import { pending } from "~/lib/pending";
-import type { MediaSlot } from "~/types/content";
+import type { HeroBackground, MediaSlot } from "~/types/content";
 
 /**
  * Registro central de fotos y vídeos.
@@ -8,18 +8,30 @@ import type { MediaSlot } from "~/types/content";
  * Verónica basta con copiarlo en public/assets/veronica/<carpeta>/ y cambiar
  * `src` (y `poster` en los vídeos). El layout no se toca.
  */
+/**
+ * Fondo del hero. Cuando llegue el material, copiarlo en
+ * public/assets/veronica/hero/ y sustituir cada pending() por su ruta:
+ *   video         → "/assets/veronica/hero/veronica-hero.mp4"
+ *   videoPortrait → "/assets/veronica/hero/veronica-hero-vertical.mp4" (opcional)
+ *   poster        → "/assets/veronica/hero/veronica-hero.jpg"
+ *   posterMobile  → "/assets/veronica/hero/veronica-hero-movil.jpg"
+ * Después, ajustar `focal` mirando el recorte en tablet y móvil.
+ */
+export const heroBackground: HeroBackground = {
+  video: pending(
+    "Vídeo horizontal 16:9 de Verónica entrenando: 8–15 s en bucle, movimiento pausado, sin sonido ni textos (MP4 H.264, 1080p, ≤ 4 MB)",
+  ),
+  videoPortrait: pending("Opcional: versión vertical del mismo vídeo para tablet en vertical (4:5, 1080×1350, ≤ 3 MB)"),
+  poster: pending("Fotograma del vídeo del hero en alta calidad (1920×1080, ≤ 250 KB)"),
+  posterMobile: pending("Foto vertical de la misma escena para móvil (1080×1350, ≤ 200 KB)"),
+  // Verónica en la mitad derecha del encuadre: a la izquierda queda el texto.
+  focal: { mobile: "50% 30%", tablet: "65% 30%", desktop: "70% 40%" },
+  alt: "Verónica Calabuch entrenando en su sala",
+  brief:
+    "Verónica en movimiento en su sala, luz natural, ritmo tranquilo. Ella en la mitad derecha del plano; la izquierda despejada para el texto.",
+};
+
 export const media = {
-  hero: {
-    id: "hero",
-    kind: "video",
-    src: pending("Vídeo vertical 6–10 s de Verónica entrenando en su sala (MP4 H.264, 720p, ≤ 1,5 MB)"),
-    poster: pending("Fotograma del vídeo del hero en alta calidad (1080×1920)"),
-    width: 1080,
-    height: 1920,
-    alt: "Verónica Calabuch entrenando en su sala",
-    focal: "50% 35%",
-    brief: "Vídeo vertical: Verónica en movimiento, cara visible, parte de la sala al fondo.",
-  },
   about: {
     id: "about",
     kind: "image",
@@ -70,12 +82,13 @@ export const media = {
   online: {
     id: "online",
     kind: "video",
-    src: pending("Vídeo de Verónica en una sesión online en directo, frente a cámara (16:9)"),
-    poster: pending("Fotograma del vídeo online"),
-    width: 1920,
-    height: 1080,
-    alt: "Verónica entrenando frente a cámara",
-    brief: "Verónica guiando una sesión online en directo frente a cámara, en horizontal.",
+    src: pending("Vídeo corto de Verónica guiando una sesión frente a cámara (vertical 4:5, sin sonido)"),
+    poster: pending("Fotograma del vídeo online (4:5, 1080×1350)"),
+    width: 1080,
+    height: 1350,
+    alt: "Verónica guiando una sesión online frente a la cámara",
+    focal: "50% 30%",
+    brief: "Verónica frente a cámara, como la ve quien entrena desde casa: plano medio, mirada a cámara, luz natural.",
   },
   studio: {
     id: "studio",

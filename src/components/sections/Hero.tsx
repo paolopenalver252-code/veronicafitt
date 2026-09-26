@@ -1,25 +1,27 @@
 import { m } from "motion/react";
 import { ContactCta } from "~/components/contact/ContactIntent";
-import { HeroMedia } from "~/components/media/HeroMedia";
+import { HeroBackground } from "~/components/media/HeroBackground";
 import { easeOutSoft } from "~/components/motion/MotionProvider";
 import { RevealLines } from "~/components/motion/RevealLines";
 import { textLinkClasses } from "~/components/ui/Button";
 import { hero } from "~/data/home";
-import { media } from "~/data/media";
+import { heroBackground } from "~/data/media";
 
 /**
- * Portada editorial: nombre, oficio y una frase grande a la izquierda;
- * Verónica en vertical a la derecha. En móvil, la imagen va a sangre.
+ * Portada editorial: nombre, oficio y una frase grande abajo a la izquierda.
+ * - Tablet y escritorio: Verónica en vídeo a pantalla completa, fundido en el
+ *   blanco roto por el lado del texto (el texto sigue en grafito sobre claro).
+ * - Móvil: la foto va a sangre arriba y el texto debajo; nunca se carga vídeo.
  */
 export function Hero() {
   return (
     <section id="inicio" aria-labelledby="hero-title" className="relative pt-(--nav-h)">
-      <div className="lg:container-site lg:grid lg:min-h-[calc(100svh-var(--nav-h))] lg:grid-cols-12 lg:items-end lg:gap-10 lg:pt-8 lg:pb-14">
-        {/* Imagen / vídeo vertical: máscara que se abre y escala que se asienta. */}
-        <div className="relative lg:order-2 lg:col-span-5 lg:col-start-8 lg:justify-self-end">
+      <div className="relative md:flex md:min-h-[calc(100svh-var(--nav-h))] md:items-end">
+        {/* Fondo: máscara que se abre y escala que se asienta, una sola vez. */}
+        <div data-hero-media className="relative h-[48svh] min-h-[22rem] md:absolute md:inset-0 md:h-auto md:min-h-0">
           <m.div
             data-motion
-            className="relative h-[48svh] min-h-[22rem] w-full overflow-hidden lg:aspect-[9/16] lg:h-[min(80svh,54rem)] lg:min-h-0 lg:w-auto"
+            className="absolute inset-0 overflow-hidden"
             initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
             animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
             transition={{ duration: 1.4, ease: easeOutSoft, delay: 0.15 }}
@@ -27,25 +29,17 @@ export function Hero() {
             <m.div
               data-motion
               className="absolute inset-0"
-              initial={{ scale: 1.1 }}
+              initial={{ scale: 1.08 }}
               animate={{ scale: 1 }}
-              transition={{ duration: 2.2, ease: easeOutSoft, delay: 0.15 }}
+              transition={{ duration: 2.4, ease: easeOutSoft, delay: 0.15 }}
             >
-              <HeroMedia slot={media.hero} />
+              <HeroBackground bg={heroBackground} />
             </m.div>
           </m.div>
-          {/* Filete fino desplazado: aire de página impresa, sin llegar a ser un marco. */}
-          <m.span
-            aria-hidden
-            data-motion
-            className="pointer-events-none absolute -inset-3 hidden border border-linea lg:block"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.2 }}
-          />
         </div>
 
-        <div className="flex flex-col px-5 pt-7 pb-16 md:px-10 lg:order-1 lg:col-span-7 lg:px-0 lg:pt-0 lg:pb-2">
+        {/* Desde tablet el bloque cubre el fondo: solo su contenido recibe clics (el botón de pausa del vídeo queda accesible). */}
+        <div className="relative flex w-full flex-col px-5 pt-7 pb-16 md:pointer-events-none md:container-site md:pt-32 md:pb-16 md:*:pointer-events-auto lg:pb-20">
           <RevealLines
             as="h1"
             id="hero-title"
@@ -72,7 +66,7 @@ export function Hero() {
           {/* En móvil el CTA va antes que el texto: así entra en el primer pantallazo. */}
           <m.p
             data-motion
-            className="order-3 mt-7 max-w-[29rem] text-lead text-pretty text-piedra lg:order-2 lg:mt-10"
+            className="order-3 mt-7 max-w-[29rem] text-lead text-pretty text-piedra md:order-2 md:mt-8 lg:mt-10"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: easeOutSoft, delay: 0.95 }}
@@ -81,7 +75,7 @@ export function Hero() {
           </m.p>
           <m.div
             data-motion
-            className="order-2 mt-7 flex items-center gap-6 lg:order-3 lg:mt-10 lg:gap-8"
+            className="order-2 mt-7 flex items-center gap-6 md:order-3 md:mt-8 md:self-start lg:mt-10 lg:gap-8"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: easeOutSoft, delay: 0.85 }}
