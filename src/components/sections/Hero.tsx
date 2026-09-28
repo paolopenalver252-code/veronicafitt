@@ -1,56 +1,82 @@
 import { m } from "motion/react";
 import { ContactCta } from "~/components/contact/ContactIntent";
-import { HeroBackground } from "~/components/media/HeroBackground";
+import { HeroVideo } from "~/components/media/HeroVideo";
 import { easeOutSoft } from "~/components/motion/MotionProvider";
 import { RevealLines } from "~/components/motion/RevealLines";
 import { textLinkClasses } from "~/components/ui/Button";
 import { hero } from "~/data/home";
-import { heroBackground } from "~/data/media";
+import { heroVideo } from "~/data/media";
 
 /**
- * Portada editorial: nombre, oficio y una frase grande abajo a la izquierda.
- * - Tablet y escritorio: Verónica en vídeo a pantalla completa, fundido en el
- *   blanco roto por el lado del texto (el texto sigue en grafito sobre claro).
- * - Móvil: la foto va a sangre arriba y el texto debajo; nunca se carga vídeo.
+ * Portada editorial: nombre, oficio y una frase grande; Verónica en vertical.
+ * El vídeo es un Reel (9:16) y su marco tiene esa misma proporción: nunca se
+ * recorta ni se deforma.
+ * - Escritorio: texto a la izquierda, vídeo en la columna derecha.
+ * - Tablet: la misma composición, con el titular a su escala.
+ * - Móvil: vídeo arriba a la derecha con la firma en vertical a su lado, y el
+ *   texto debajo (el CTA sigue en el primer pantallazo).
  */
 export function Hero() {
   return (
     <section id="inicio" aria-labelledby="hero-title" className="relative pt-(--nav-h)">
-      <div className="relative md:flex md:min-h-[calc(100svh-var(--nav-h))] md:items-end">
-        {/* Fondo: máscara que se abre y escala que se asienta, una sola vez. */}
-        <div data-hero-media className="relative h-[48svh] min-h-[22rem] md:absolute md:inset-0 md:h-auto md:min-h-0">
-          <m.div
+      <div className="container-site md:flex md:items-end md:gap-8 md:pt-10 md:pb-16 lg:grid lg:min-h-[calc(100svh-var(--nav-h))] lg:grid-cols-12 lg:gap-10 lg:pt-8 lg:pb-14">
+        <div className="flex items-end justify-end gap-5 pt-5 md:order-2 md:shrink-0 md:pt-0 lg:col-span-5 lg:col-start-8 lg:justify-self-end">
+          {/* Firma en vertical junto al vídeo (móvil). Desde tablet va sobre el titular. */}
+          <m.p
+            aria-hidden
             data-motion
-            className="absolute inset-0 overflow-hidden"
-            initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
-            animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
-            transition={{ duration: 1.4, ease: easeOutSoft, delay: 0.15 }}
+            className="flex rotate-180 gap-2 [writing-mode:vertical-rl] md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
           >
+            <span className="text-small font-semibold tracking-[0.22em] uppercase">{hero.name}</span>
+            <span className="text-small text-piedra">{hero.role}</span>
+          </m.p>
+
+          {/* Vídeo vertical: máscara que se abre y escala que se asienta, una sola vez. */}
+          <div data-hero-media className="relative aspect-[9/16] h-[min(112vw,54svh)] md:h-[min(62svh,36rem)] lg:h-[min(80svh,54rem)]">
             <m.div
               data-motion
-              className="absolute inset-0"
-              initial={{ scale: 1.08 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 2.4, ease: easeOutSoft, delay: 0.15 }}
+              className="absolute inset-0 overflow-hidden"
+              initial={{ clipPath: "inset(0% 0% 100% 0%)" }}
+              animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
+              transition={{ duration: 1.4, ease: easeOutSoft, delay: 0.15 }}
             >
-              <HeroBackground bg={heroBackground} />
+              <m.div
+                data-motion
+                className="absolute inset-0"
+                initial={{ scale: 1.1 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 2.2, ease: easeOutSoft, delay: 0.15 }}
+              >
+                <HeroVideo hero={heroVideo} />
+              </m.div>
             </m.div>
-          </m.div>
+            {/* Filete fino desplazado: aire de página impresa, sin llegar a ser un marco. */}
+            <m.span
+              aria-hidden
+              data-motion
+              className="pointer-events-none absolute -inset-2.5 border border-linea lg:-inset-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 1.2 }}
+            />
+          </div>
         </div>
 
-        {/* Desde tablet el bloque cubre el fondo: solo su contenido recibe clics (el botón de pausa del vídeo queda accesible). */}
-        <div className="relative flex w-full flex-col px-5 pt-7 pb-16 md:pointer-events-none md:container-site md:pt-32 md:pb-16 md:*:pointer-events-auto lg:pb-20">
+        <div className="flex flex-col pt-9 pb-16 md:order-1 md:flex-1 md:pt-0 md:pb-2 lg:col-span-7">
           <RevealLines
             as="h1"
             id="hero-title"
             trigger="load"
             delay={0.35}
             lines={hero.headline}
-            className="font-display text-display"
+            className="font-display text-display md:text-[clamp(3.25rem,7.5vw,4.75rem)] lg:text-display"
             before={
               <m.span
                 data-motion
-                className="mb-6 block font-sans lg:mb-12"
+                className="sr-only font-sans md:not-sr-only md:mb-8 md:block lg:mb-12"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.1 }}
@@ -75,7 +101,7 @@ export function Hero() {
           </m.p>
           <m.div
             data-motion
-            className="order-2 mt-7 flex items-center gap-6 md:order-3 md:mt-8 md:self-start lg:mt-10 lg:gap-8"
+            className="order-2 mt-7 flex items-center gap-6 md:order-3 md:mt-8 lg:mt-10 lg:gap-8"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: easeOutSoft, delay: 0.85 }}

@@ -87,7 +87,7 @@ export function OnlineSessionFrame({ className, priority = false }: { className?
   const time = resolved(session.time);
 
   return (
-    <figure className={cn("relative", className)}>
+    <figure className={cn("media-inset relative", className)}>
       <ImageReveal className="aspect-[4/5] sm:aspect-[4/3] lg:aspect-[4/5] lg:max-h-[calc(100svh-var(--nav-h)-4rem)]">
         <Media slot={media.online} tone="deep" priority={priority} sizes="(min-width: 1024px) 45vw, 100vw" />
       </ImageReveal>
@@ -110,7 +110,7 @@ export function OnlineSessionFrame({ className, priority = false }: { className?
         </span>
       </FadeIn>
 
-      <DevNote value={session.time} className="mt-3 px-5 lg:px-0" />
+      <DevNote value={session.time} className="mt-3 md:px-10 lg:px-0" />
     </figure>
   );
 }

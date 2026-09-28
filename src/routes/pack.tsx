@@ -72,7 +72,7 @@ export default function PackPage() {
         </div>
 
         <div className="mt-6 lg:container-site lg:mt-10 lg:grid lg:grid-cols-12 lg:items-start lg:gap-10">
-          <ImageReveal className="aspect-[4/5] lg:sticky lg:top-[calc(var(--nav-h)+2rem)] lg:col-span-6">
+          <ImageReveal className="media-inset aspect-[4/5] lg:sticky lg:top-[calc(var(--nav-h)+2rem)] lg:col-span-6">
             <Media slot={pack.media} tone="deep" priority sizes="(min-width: 1024px) 50vw, 100vw" />
           </ImageReveal>
 
@@ -120,7 +120,7 @@ export default function PackPage() {
 
             <div className="mt-10 border-t border-linea pt-6">
               <p className="text-micro text-piedra">Precio</p>
-              <p className="font-heading mt-1 text-h3">
+              <p className="mt-1 text-h3 font-medium tracking-[-0.02em]">
                 {price ?? priceLabel(pack)}
                 {price && priceNote && <span className="ml-2 font-sans text-small text-piedra">{priceNote}</span>}
               </p>

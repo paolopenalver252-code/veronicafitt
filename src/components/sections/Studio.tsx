@@ -45,7 +45,7 @@ export function Studio() {
         </div>
       </div>
 
-      <ScrollSettle className="mt-16 aspect-[4/5] sm:aspect-[16/9] lg:mt-24 lg:aspect-[21/9]">
+      <ScrollSettle className="media-inset mt-16 aspect-[4/5] sm:aspect-[16/9] lg:mt-24 lg:aspect-[21/9]">
         <Media slot={media.studio} tone="deep" sizes="100vw" />
       </ScrollSettle>
 

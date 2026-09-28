@@ -1,5 +1,5 @@
-import serifUrl from "../node_modules/@fontsource-variable/bodoni-moda/files/bodoni-moda-latin-opsz-normal.woff2?url";
-import sansUrl from "../node_modules/@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url";
+import serifUrl from "../node_modules/@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2?url";
+import sansUrl from "../node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2?url";
 import { useState, type ReactNode } from "react";
 import {
   isRouteErrorResponse,

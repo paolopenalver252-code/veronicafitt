@@ -12,7 +12,7 @@ export function About() {
     <section id="sobre-mi" aria-labelledby="sobre-mi-title" className="section-y bg-tiza-deep/60">
       <div className="lg:container-site lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
         <div className="relative lg:col-span-6">
-          <ImageReveal className="aspect-[4/5] lg:aspect-[5/6]">
+          <ImageReveal className="media-inset aspect-[4/5] lg:aspect-[5/6]">
             <Media slot={media.about} tone="deep" sizes="(min-width: 1024px) 55vw, 100vw" />
           </ImageReveal>
         </div>

@@ -25,21 +25,16 @@ export type MediaSlot = {
 };
 
 /**
- * Fondo del hero. Tablet y escritorio: vídeo a pantalla completa (con su
- * fotograma como póster y como alternativa si no carga). Móvil: solo imagen,
- * nunca se descarga el vídeo.
+ * Vídeo del hero: vertical 9:16 (un Reel de Instagram). Se muestra en un marco
+ * de su misma proporción, así que nunca se recorta ni se deforma.
  */
-export type HeroBackground = {
-  /** Vídeo horizontal 16:9 para escritorio (y tablet si no hay versión vertical). */
+export type HeroVideo = {
+  /** Vídeo vertical 9:16, sin sonido (se reproduce silenciado). */
   video: Maybe<string>;
-  /** Opcional: versión vertical del mismo vídeo para tablet en vertical. */
-  videoPortrait?: Maybe<string>;
-  /** Fotograma horizontal del vídeo: se ve al instante y queda si el vídeo no puede reproducirse. */
+  /** Fotograma del vídeo (9:16): se ve al instante y queda si el vídeo no puede reproducirse. */
   poster: Maybe<string>;
-  /** Foto vertical de la misma escena para móvil. */
-  posterMobile: Maybe<string>;
-  /** object-position por tamaño, para que el recorte no corte a Verónica. */
-  focal: { mobile: string; tablet: string; desktop: string };
+  /** object-position por si el archivo no es exactamente 9:16. */
+  focal?: string;
   alt: string;
   brief: string;
 };

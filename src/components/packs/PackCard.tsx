@@ -74,12 +74,12 @@ export function PackCard({
             {duration && (
               <div>
                 <dt className="text-micro text-piedra">Duración</dt>
-                <dd className="font-heading mt-1 text-[1.5rem] leading-none">{duration}</dd>
+                <dd className="mt-1 text-[1.5rem] leading-none font-medium tracking-[-0.01em]">{duration}</dd>
               </div>
             )}
             <div>
               <dt className="text-micro text-piedra">Precio</dt>
-              <dd className="font-heading mt-1 text-[1.5rem] leading-none">
+              <dd className="mt-1 text-[1.5rem] leading-none font-medium tracking-[-0.01em]">
                 {price ?? priceLabel(pack)}
                 {price && priceNote && <span className="ml-1.5 font-sans text-small text-piedra">{priceNote}</span>}
               </dd>

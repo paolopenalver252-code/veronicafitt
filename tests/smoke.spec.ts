@@ -207,30 +207,34 @@ test.describe("Packs", () => {
   });
 });
 
-test.describe("Hero con vídeo de fondo", () => {
-  for (const [label, width, height] of [["escritorio", 1440, 900], ["tablet", 820, 1180]] as const) {
-    test(`${label}: fondo a pantalla completa, con alternativa visible y CTA legible`, async ({ browser }) => {
+test.describe("Hero con vídeo vertical", () => {
+  for (const [label, width, height] of [["escritorio", 1440, 900], ["tablet", 820, 1180], ["móvil", 390, 844]] as const) {
+    test(`${label}: marco 9:16 sin deformar, con alternativa visible y CTA en pantalla`, async ({ browser }) => {
       const context = await browser.newContext({ viewport: { width, height } });
       const page = await context.newPage();
       await page.goto("/");
       const media = page.locator("[data-hero-media]");
       const box = await media.boundingBox();
-      expect(Math.round(box!.width)).toBe(width);
-      // Sin vídeo todavía: se ve el póster o el hueco reservado, nunca un vacío.
+      // Misma proporción que el Reel: el vídeo nunca se recorta ni se estira.
+      expect(box!.width / box!.height).toBeCloseTo(9 / 16, 2);
       await expect(media.locator('img, [role="img"]').filter({ visible: true })).toHaveCount(1);
       await expect(page.locator("#inicio").getByRole("link", { name: "Escríbeme" })).toBeInViewport();
       await context.close();
     });
   }
+});
 
-  test("móvil: solo imagen, nunca un elemento de vídeo", async ({ browser }) => {
-    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+test("móvil: las imágenes respiran (margen lateral) sin cambiar en escritorio", async ({ browser }) => {
+  const edges = async (width: number) => {
+    const context = await browser.newContext({ viewport: { width, height: 900 } });
     const page = await context.newPage();
-    await page.goto("/", { waitUntil: "networkidle" });
-    await expect(page.locator("[data-hero-media] video")).toHaveCount(0);
-    await expect(page.locator("[data-hero-media]").locator('img, [role="img"]').filter({ visible: true })).toHaveCount(1);
+    await page.goto("/");
+    const box = await page.locator("#sobre-mi .media-inset").first().boundingBox();
     await context.close();
-  });
+    return { left: Math.round(box!.x), right: Math.round(width - box!.x - box!.width) };
+  };
+  expect(await edges(390)).toEqual({ left: 20, right: 20 });
+  expect((await edges(820)).left).toBe(0);
 });
 
 test("sin scroll horizontal en móvil, tablet y escritorio", async ({ browser }) => {

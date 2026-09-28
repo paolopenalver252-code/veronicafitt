@@ -1,5 +1,19 @@
 import { pending } from "~/lib/pending";
-import type { HeroBackground, MediaSlot } from "~/types/content";
+import type { HeroVideo, MediaSlot } from "~/types/content";
+
+/**
+ * Vídeo del hero: el Reel vertical de Verónica. Cuando llegue, copiarlo en
+ * public/assets/veronica/hero/ y sustituir cada pending() por su ruta:
+ *   video  → "/assets/veronica/hero/veronica-hero.mp4"
+ *   poster → "/assets/veronica/hero/veronica-hero.jpg"
+ */
+export const heroVideo: HeroVideo = {
+  video: pending("Reel vertical 9:16 de Verónica entrenando (MP4 H.264, 720×1280 o 1080×1920, sin audio, ≤ 4 MB)"),
+  poster: pending("Fotograma del Reel en alta calidad (1080×1920, ≤ 250 KB)"),
+  focal: "50% 50%",
+  alt: "Verónica Calabuch entrenando",
+  brief: "Reel vertical de Verónica entrenando: ella completa en el plano, sin textos ni stickers.",
+};
 
 /**
  * Registro central de fotos y vídeos.
@@ -8,29 +22,6 @@ import type { HeroBackground, MediaSlot } from "~/types/content";
  * Verónica basta con copiarlo en public/assets/veronica/<carpeta>/ y cambiar
  * `src` (y `poster` en los vídeos). El layout no se toca.
  */
-/**
- * Fondo del hero. Cuando llegue el material, copiarlo en
- * public/assets/veronica/hero/ y sustituir cada pending() por su ruta:
- *   video         → "/assets/veronica/hero/veronica-hero.mp4"
- *   videoPortrait → "/assets/veronica/hero/veronica-hero-vertical.mp4" (opcional)
- *   poster        → "/assets/veronica/hero/veronica-hero.jpg"
- *   posterMobile  → "/assets/veronica/hero/veronica-hero-movil.jpg"
- * Después, ajustar `focal` mirando el recorte en tablet y móvil.
- */
-export const heroBackground: HeroBackground = {
-  video: pending(
-    "Vídeo horizontal 16:9 de Verónica entrenando: 8–15 s en bucle, movimiento pausado, sin sonido ni textos (MP4 H.264, 1080p, ≤ 4 MB)",
-  ),
-  videoPortrait: pending("Opcional: versión vertical del mismo vídeo para tablet en vertical (4:5, 1080×1350, ≤ 3 MB)"),
-  poster: pending("Fotograma del vídeo del hero en alta calidad (1920×1080, ≤ 250 KB)"),
-  posterMobile: pending("Foto vertical de la misma escena para móvil (1080×1350, ≤ 200 KB)"),
-  // Verónica en la mitad derecha del encuadre: a la izquierda queda el texto.
-  focal: { mobile: "50% 30%", tablet: "65% 30%", desktop: "70% 40%" },
-  alt: "Verónica Calabuch entrenando en su sala",
-  brief:
-    "Verónica en movimiento en su sala, luz natural, ritmo tranquilo. Ella en la mitad derecha del plano; la izquierda despejada para el texto.",
-};
-
 export const media = {
   about: {
     id: "about",

@@ -32,7 +32,7 @@ export function Accordion({ items, headingLevel = 3 }: { items: AccordionItem[];
               >
                 <span
                   className={cn(
-                    "font-heading text-[1.3125rem] leading-snug text-pretty transition-colors duration-300 lg:text-[1.5rem]",
+                    "text-[1.3125rem] leading-snug font-medium tracking-[-0.01em] text-pretty transition-colors duration-300 lg:text-[1.5rem]",
                     isOpen ? "text-acento" : "group-hover:text-acento",
                   )}
                 >

@@ -64,6 +64,7 @@ function ServiceRow({ service, index }: { service: Service; index: number }) {
     <article className="lg:container-site lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
       <ImageReveal
         className={cn(
+          "media-inset",
           layout.aspect,
           "group",
           wide ? "lg:col-span-8" : "lg:col-span-6",
