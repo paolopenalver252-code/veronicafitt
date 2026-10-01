@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { cn } from "~/lib/cn";
 import { resolved } from "~/lib/pending";
 import type { HeroVideo as HeroVideoData } from "~/types/content";
@@ -6,10 +6,15 @@ import { MediaPlaceholder } from "./MediaPlaceholder";
 import { useAutoplayAllowed } from "./useAutoplayAllowed";
 import { useVideoControl, VideoToggle } from "./VideoToggle";
 
-const fit = "absolute inset-0 h-full w-full object-cover";
+/** Desde tablet (768 px) hay vídeo; en móvil, solo imagen. */
+const WIDE = "(min-width: 48rem)";
+
+const fit =
+  "absolute inset-0 h-full w-full object-cover [object-position:var(--focal-m)] md:[object-position:var(--focal)]";
 
 /**
- * Vídeo vertical del hero. Rellena su marco (9:16, la proporción del Reel):
+ * Vídeo vertical del hero. En tablet y escritorio rellena su marco (9:16, la
+ * proporción del Reel). En móvil nunca se descarga: se ve solo la imagen.
  * - El póster es el elemento LCP y se ve al instante.
  * - El vídeo empieza a descargarse solo después del evento `load`, en un
  *   momento ocioso, y sustituye al póster con un fundido cuando ya se reproduce.
@@ -22,14 +27,26 @@ export function HeroVideo({ hero }: { hero: HeroVideoData }) {
   const control = useVideoControl(ref);
   const { autoPlay } = control;
   const [load, setLoad] = useState(false);
+  const [wide, setWide] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [failed, setFailed] = useState(false);
 
   const src = resolved(hero.video);
   const poster = resolved(hero.poster);
+  const showVideo = Boolean(load && wide && src && !failed);
+  const posterMobile = (hero.posterMobile ? resolved(hero.posterMobile) : null) ?? poster;
+
+  // Solo desde tablet: en móvil el vídeo nunca se monta ni se descarga.
+  useEffect(() => {
+    const query = window.matchMedia(WIDE);
+    const update = () => setWide(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
-    if (!allowed || !src) return;
+    if (!allowed || !src || !wide) return;
     let idleId = 0;
     const start = () => {
       idleId = window.requestIdleCallback
@@ -43,36 +60,29 @@ export function HeroVideo({ hero }: { hero: HeroVideoData }) {
       if (window.cancelIdleCallback) window.cancelIdleCallback(idleId);
       else window.clearTimeout(idleId);
     };
-  }, [allowed, src]);
+  }, [allowed, src, wide]);
 
   // Fuera de pantalla, el vídeo se pausa.
   useEffect(() => {
     const el = ref.current;
-    if (!el || !load) return;
+    if (!el || !showVideo) return;
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) autoPlay();
       else el.pause();
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [load, autoPlay]);
+  }, [showVideo, autoPlay]);
 
-  const showVideo = load && src && !failed;
+  const focal = { "--focal-m": hero.focalMobile ?? hero.focal, "--focal": hero.focal } as CSSProperties;
 
   return (
-    <div className="absolute inset-0">
-      {poster ? (
-        <img
-          src={poster}
-          alt={hero.alt}
-          width={1080}
-          height={1920}
-          loading="eager"
-          fetchPriority="high"
-          decoding="sync"
-          className={fit}
-          style={{ objectPosition: hero.focal }}
-        />
+    <div className="absolute inset-0" style={focal}>
+      {posterMobile ? (
+        <picture>
+          {poster && <source media={WIDE} srcSet={poster} />}
+          <img src={posterMobile} alt={hero.alt} loading="eager" fetchPriority="high" decoding="sync" className={fit} />
+        </picture>
       ) : (
         <MediaPlaceholder
           slot={{ id: "hero", kind: "video", src: hero.video, width: 1080, height: 1920, alt: hero.alt, brief: hero.brief }}
@@ -83,7 +93,7 @@ export function HeroVideo({ hero }: { hero: HeroVideoData }) {
       {showVideo && (
         <video
           ref={ref}
-          src={src}
+          src={src ?? undefined}
           muted
           loop
           playsInline
@@ -94,7 +104,6 @@ export function HeroVideo({ hero }: { hero: HeroVideoData }) {
           onPlaying={() => setPlaying(true)}
           onError={() => setFailed(true)}
           className={cn(fit, "transition-opacity duration-1000", playing ? "opacity-100" : "opacity-0")}
-          style={{ objectPosition: hero.focal }}
         />
       )}
 

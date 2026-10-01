@@ -47,7 +47,7 @@ export function Footer() {
             <ul className="grid grid-cols-2 gap-x-6">
               {navItems.map((item) => (
                 <li key={item.anchor}>
-                  <AnchorLink anchor={item.anchor} className={linkClass}>
+                  <AnchorLink anchor={item.anchor} to={item.to} className={linkClass}>
                     {item.label}
                   </AnchorLink>
                 </li>

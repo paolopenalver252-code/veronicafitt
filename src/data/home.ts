@@ -93,7 +93,7 @@ export const services: Service[] = [
     forWhom: "Para quien tiene el día lleno: trabajo temprano, hijos, horarios imposibles.",
     media: media.online,
     status: "coming-soon",
-    cta: { label: "Conocer el entrenamiento online", href: "#online" },
+    cta: { label: "Entrena conmigo", href: "/online" },
   },
 ];
 

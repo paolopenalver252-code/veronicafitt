@@ -16,7 +16,7 @@ import { buildMeta } from "~/lib/seo";
 
 export function meta(_: Route.MetaArgs) {
   return buildMeta({
-    title: "Entrenamiento online en directo con Verónica Calabuch",
+    title: "Entrena conmigo | Entrenamiento online en directo con Verónica Calabuch",
     description:
       "Entrena con Verónica en directo desde casa: corrección de la técnica, motivación y acompañamiento. Y si no puedes conectarte, la sesión grabada.",
     path: "/online",

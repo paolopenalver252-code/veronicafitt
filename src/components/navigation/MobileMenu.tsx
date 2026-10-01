@@ -1,5 +1,6 @@
 import { m } from "motion/react";
 import { useEffect, useRef } from "react";
+import { useLocation } from "react-router";
 import { ContactCta } from "~/components/contact/ContactIntent";
 import { easeOutSoft } from "~/components/motion/MotionProvider";
 import { InstagramIcon } from "~/components/ui/InstagramIcon";
@@ -10,6 +11,7 @@ import { AnchorLink } from "./AnchorLink";
 /** Menú móvil a pantalla completa. El resto de la página queda inerte mientras está abierto. */
 export function MobileMenu({ onClose, active }: { onClose: () => void; active: string | null }) {
   const listRef = useRef<HTMLUListElement>(null);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     listRef.current?.querySelector("a")?.focus({ preventScroll: true });
@@ -33,7 +35,7 @@ export function MobileMenu({ onClose, active }: { onClose: () => void; active: s
       >
         <ul ref={listRef} className="flex flex-col">
           {navItems.map((item, i) => {
-            const isActive = active === item.anchor;
+            const isActive = active === item.anchor || (item.to !== undefined && pathname === item.to);
             return (
               <m.li
                 key={item.anchor}
@@ -43,7 +45,8 @@ export function MobileMenu({ onClose, active }: { onClose: () => void; active: s
               >
                 <AnchorLink
                   anchor={item.anchor}
-                  current={isActive}
+                  to={item.to}
+                  current={active === item.anchor}
                   onClick={onClose}
                   className={cn(
                     "font-display flex min-h-15 items-center gap-4 text-[2.25rem] leading-none transition-colors",

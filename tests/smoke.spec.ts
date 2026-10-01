@@ -33,11 +33,14 @@ test.describe("Home", () => {
     await context.close();
   });
 
-  test("no descarga vídeo en la carga inicial", async ({ page }) => {
-    const videos: string[] = [];
-    page.on("request", (r) => r.resourceType() === "media" && videos.push(r.url()));
+  test("el vídeo del hero no compite con la carga inicial", async ({ page }) => {
+    // Se pide solo después del evento load (en móvil, nunca: ver "Hero con vídeo vertical").
+    let loaded = false;
+    const early: string[] = [];
+    page.on("load", () => (loaded = true));
+    page.on("request", (r) => r.resourceType() === "media" && !loaded && early.push(r.url()));
     await page.goto("/", { waitUntil: "networkidle" });
-    expect(videos).toEqual([]);
+    expect(early).toEqual([]);
   });
 
   test("navegación por anclas", async ({ page }, info) => {
@@ -125,6 +128,26 @@ test.describe("Online", () => {
     await expect(page.getByRole("link", { name: /comprar/i })).toHaveCount(0);
     await expect(page.getByRole("button", { name: /comprar/i })).toHaveCount(0);
   });
+
+  test("«Entrena conmigo» lleva a /online desde la navegación y la home", async ({ page }, info) => {
+    await page.goto("/");
+    if (isMobile(info.project.name)) {
+      await page.getByRole("button", { name: "Abrir menú" }).click();
+      await page.getByRole("dialog", { name: "Menú" }).getByRole("link", { name: "Entrena conmigo" }).click();
+    } else {
+      await page.getByRole("navigation", { name: "Principal" }).getByRole("link", { name: "Entrena conmigo" }).click();
+    }
+    await expect(page).toHaveURL(/\/online$/);
+    await expect(page.locator("h1")).toContainText("Entrena conmigo");
+    if (!isMobile(info.project.name)) {
+      await expect(page.getByRole("navigation", { name: "Principal" }).getByRole("link", { name: "Entrena conmigo" })).toHaveAttribute("aria-current", "page");
+    }
+
+    await page.goto("/#entrenamientos");
+    await page.locator("#entrenamientos").getByRole("link", { name: "Entrena conmigo" }).click();
+    await expect(page).toHaveURL(/\/online$/);
+    await expect(page.getByRole("navigation", { name: "Secciones" }).getByRole("link", { name: "Entrena conmigo" })).toHaveAttribute("href", "/online");
+  });
 });
 
 test("rutas legales y 404", async ({ page }) => {
@@ -208,7 +231,7 @@ test.describe("Packs", () => {
 });
 
 test.describe("Hero con vídeo vertical", () => {
-  for (const [label, width, height] of [["escritorio", 1440, 900], ["tablet", 820, 1180], ["móvil", 390, 844]] as const) {
+  for (const [label, width, height] of [["escritorio", 1440, 900], ["tablet", 820, 1180]] as const) {
     test(`${label}: marco 9:16 sin deformar, con alternativa visible y CTA en pantalla`, async ({ browser }) => {
       const context = await browser.newContext({ viewport: { width, height } });
       const page = await context.newPage();
@@ -222,6 +245,19 @@ test.describe("Hero con vídeo vertical", () => {
       await context.close();
     });
   }
+
+  test("móvil: el hero de siempre, imagen a sangre y sin vídeo", async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    const page = await context.newPage();
+    const videos: string[] = [];
+    page.on("request", (r) => r.resourceType() === "media" && videos.push(r.url()));
+    await page.goto("/", { waitUntil: "networkidle" });
+    const box = await page.locator("[data-hero-media]").boundingBox();
+    expect(Math.round(box!.width)).toBe(390);
+    await expect(page.locator("[data-hero-media] video")).toHaveCount(0);
+    expect(videos).toEqual([]);
+    await context.close();
+  });
 });
 
 test("móvil: las imágenes respiran (margen lateral) sin cambiar en escritorio", async ({ browser }) => {

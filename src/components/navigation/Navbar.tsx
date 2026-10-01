@@ -62,21 +62,25 @@ export function Navbar({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOp
 
           <nav aria-label="Principal" className="hidden lg:block">
             <ul className="flex items-center gap-7">
-              {navItems.map((item) => (
-                <li key={item.anchor}>
-                  <AnchorLink
-                    anchor={item.anchor}
-                    current={active === item.anchor}
-                    className={cn(
-                      "relative inline-flex min-h-11 items-center text-small font-medium transition-colors hover:text-grafito",
-                      "after:absolute after:inset-x-0 after:bottom-2 after:h-px after:origin-left after:bg-acento after:transition-transform after:duration-500",
-                      active === item.anchor ? "text-grafito after:scale-x-100" : "text-grafito/75 after:scale-x-0",
-                    )}
-                  >
-                    {item.label}
-                  </AnchorLink>
-                </li>
-              ))}
+              {navItems.map((item) => {
+                const isActive = active === item.anchor || (item.to !== undefined && location.pathname === item.to);
+                return (
+                  <li key={item.anchor}>
+                    <AnchorLink
+                      anchor={item.anchor}
+                      to={item.to}
+                      current={active === item.anchor}
+                      className={cn(
+                        "relative inline-flex min-h-11 items-center text-small font-medium whitespace-nowrap transition-colors hover:text-grafito",
+                        "after:absolute after:inset-x-0 after:bottom-2 after:h-px after:origin-left after:bg-acento after:transition-transform after:duration-500",
+                        isActive ? "text-grafito after:scale-x-100" : "text-grafito/75 after:scale-x-0",
+                      )}
+                    >
+                      {item.label}
+                    </AnchorLink>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 

@@ -9,33 +9,21 @@ import { heroVideo } from "~/data/media";
 
 /**
  * Portada editorial: nombre, oficio y una frase grande; Verónica en vertical.
- * El vídeo es un Reel (9:16) y su marco tiene esa misma proporción: nunca se
- * recorta ni se deforma.
- * - Escritorio: texto a la izquierda, vídeo en la columna derecha.
- * - Tablet: la misma composición, con el titular a su escala.
- * - Móvil: vídeo arriba a la derecha con la firma en vertical a su lado, y el
- *   texto debajo (el CTA sigue en el primer pantallazo).
+ * - Tablet y escritorio: texto a la izquierda y el vídeo (un Reel, 9:16) a la
+ *   derecha, en un marco de su misma proporción: nunca se recorta ni se deforma.
+ *   En tablet, el titular a su escala.
+ * - Móvil: la imagen va a sangre arriba y el texto debajo; nunca se carga vídeo.
  */
 export function Hero() {
   return (
     <section id="inicio" aria-labelledby="hero-title" className="relative pt-(--nav-h)">
-      <div className="container-site md:flex md:items-end md:gap-8 md:pt-10 md:pb-16 lg:grid lg:min-h-[calc(100svh-var(--nav-h))] lg:grid-cols-12 lg:gap-10 lg:pt-8 lg:pb-14">
-        <div className="flex items-end justify-end gap-5 pt-5 md:order-2 md:shrink-0 md:pt-0 lg:col-span-5 lg:col-start-8 lg:justify-self-end">
-          {/* Firma en vertical junto al vídeo (móvil). Desde tablet va sobre el titular. */}
-          <m.p
-            aria-hidden
-            data-motion
-            className="flex rotate-180 gap-2 [writing-mode:vertical-rl] md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+      <div className="md:container-site md:flex md:items-end md:gap-8 md:pt-10 md:pb-16 lg:grid lg:min-h-[calc(100svh-var(--nav-h))] lg:grid-cols-12 lg:gap-10 lg:pt-8 lg:pb-14">
+        <div className="md:order-2 md:flex md:shrink-0 md:items-end md:justify-end lg:col-span-5 lg:col-start-8 lg:justify-self-end">
+          {/* Móvil: bloque a sangre. Desde tablet: marco vertical 9:16. Máscara que se abre y escala que se asienta, una sola vez. */}
+          <div
+            data-hero-media
+            className="relative h-[48svh] min-h-[22rem] md:aspect-[9/16] md:h-[min(62svh,36rem)] md:min-h-0 lg:h-[min(80svh,54rem)]"
           >
-            <span className="text-small font-semibold tracking-[0.22em] uppercase">{hero.name}</span>
-            <span className="text-small text-piedra">{hero.role}</span>
-          </m.p>
-
-          {/* Vídeo vertical: máscara que se abre y escala que se asienta, una sola vez. */}
-          <div data-hero-media className="relative aspect-[9/16] h-[min(112vw,54svh)] md:h-[min(62svh,36rem)] lg:h-[min(80svh,54rem)]">
             <m.div
               data-motion
               className="absolute inset-0 overflow-hidden"
@@ -46,9 +34,9 @@ export function Hero() {
               <m.div
                 data-motion
                 className="absolute inset-0"
-                initial={{ scale: 1.1 }}
+                initial={{ scale: 1.08 }}
                 animate={{ scale: 1 }}
-                transition={{ duration: 2.2, ease: easeOutSoft, delay: 0.15 }}
+                transition={{ duration: 2.4, ease: easeOutSoft, delay: 0.15 }}
               >
                 <HeroVideo hero={heroVideo} />
               </m.div>
@@ -57,7 +45,7 @@ export function Hero() {
             <m.span
               aria-hidden
               data-motion
-              className="pointer-events-none absolute -inset-2.5 border border-linea lg:-inset-3"
+              className="pointer-events-none absolute hidden border border-linea md:block md:-inset-2.5 lg:-inset-3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 1.2 }}
@@ -65,7 +53,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="flex flex-col pt-9 pb-16 md:order-1 md:flex-1 md:pt-0 md:pb-2 lg:col-span-7">
+        <div className="flex flex-col px-5 pt-7 pb-16 md:order-1 md:flex-1 md:px-0 md:pt-0 md:pb-2 lg:col-span-7">
           <RevealLines
             as="h1"
             id="hero-title"
@@ -76,7 +64,7 @@ export function Hero() {
             before={
               <m.span
                 data-motion
-                className="sr-only font-sans md:not-sr-only md:mb-8 md:block lg:mb-12"
+                className="mb-6 block font-sans md:mb-8 lg:mb-12"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.1 }}

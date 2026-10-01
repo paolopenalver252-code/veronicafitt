@@ -6,12 +6,17 @@ import type { HeroVideo, MediaSlot } from "~/types/content";
  * public/assets/veronica/hero/ y sustituir cada pending() por su ruta:
  *   video  → "/assets/veronica/hero/veronica-hero.mp4"
  *   poster → "/assets/veronica/hero/veronica-hero.jpg"
+ *   posterMobile (opcional) → "/assets/veronica/hero/veronica-hero-movil.jpg"
  */
 export const heroVideo: HeroVideo = {
-  video: pending("Reel vertical 9:16 de Verónica entrenando (MP4 H.264, 720×1280 o 1080×1920, sin audio, ≤ 4 MB)"),
-  poster: pending("Fotograma del Reel en alta calidad (1080×1920, ≤ 250 KB)"),
+  // Reel de Verónica (22 s): bandas negras recortadas, sin audio, comprimido para web (576×1024, 1,5 MB).
+  video: "/assets/veronica/hero/veronica-hero.mp4",
+  // Primer fotograma del vídeo: el paso de la imagen al vídeo no se nota.
+  poster: "/assets/veronica/hero/veronica-hero.jpg",
   focal: "50% 50%",
-  alt: "Verónica Calabuch entrenando",
+  // Móvil: el mismo fotograma, encuadrado en Verónica (abajo, con el TRX).
+  focalMobile: "50% 84%",
+  alt: "Verónica Calabuch entrenando en su sala",
   brief: "Reel vertical de Verónica entrenando: ella completa en el plano, sin textos ni stickers.",
 };
 
@@ -48,24 +53,30 @@ export const media = {
   },
   personal: {
     id: "personal",
-    kind: "image",
-    // Provisional: captura de 265×402 px, se ve pixelada. Sustituir por el original (≥ 1200 px de ancho) con el mismo nombre.
-    src: "/assets/veronica/training/entrenamiento-personal.jpg",
-    sources: [{ type: "image/webp", srcSet: "/assets/veronica/training/entrenamiento-personal.webp" }],
-    width: 265,
-    height: 402,
-    alt: "Sesión de entrenamiento personal: sentadilla con mancuerna en la sala",
-    focal: "50% 45%",
+    kind: "video",
+    // Vídeo de una sesión uno a uno en la sala (21 s, sin audio, 576×1008, 1,1 MB).
+    src: "/assets/veronica/training/entrenamiento-personal.mp4",
+    // Primer fotograma: el paso de la imagen al vídeo no se nota.
+    poster: "/assets/veronica/training/entrenamiento-personal-video.jpg",
+    width: 576,
+    height: 1008,
+    alt: "Sesión de entrenamiento personal en la sala: sentadilla con peso y corrección de la técnica",
+    // El hueco es 4:5: se recorta sobre todo el techo, no los pies.
+    focal: "50% 85%",
     brief: "Ejercicio de fuerza donde se entienda bien el movimiento.",
   },
   funcional: {
     id: "funcional",
     kind: "video",
-    src: pending("Vídeo corto de ejercicios funcionales (sin textos de Instagram)"),
-    poster: pending("Fotograma del vídeo de fuerza funcional"),
-    width: 1080,
-    height: 1350,
+    // Vídeo de Verónica en la sala (28 s, sin audio, 576×992, 1,9 MB).
+    src: "/assets/veronica/training/fuerza-funcional.mp4",
+    // Primer fotograma: el paso de la imagen al vídeo no se nota.
+    poster: "/assets/veronica/training/fuerza-funcional.jpg",
+    width: 576,
+    height: 992,
     alt: "Verónica realizando ejercicios de fuerza funcional",
+    // El hueco es 4:5 (3:4 en escritorio): centrado, entran los brazos en alto y las rodillas.
+    focal: "50% 50%",
     brief: "Movimiento dinámico de fuerza funcional, con el material real de la sala.",
   },
   grupos: {
