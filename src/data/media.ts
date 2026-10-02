@@ -142,10 +142,13 @@ export const media = {
   closing: {
     id: "closing",
     kind: "image",
-    src: pending("Foto cálida de Verónica para el cierre (4:5)"),
-    width: 1200,
-    height: 1500,
-    alt: "Verónica Calabuch sonriendo en su sala",
+    // El mismo retrato en blanco y negro de «Sobre mí».
+    src: "/assets/veronica/about/veronica-retrato.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/about/veronica-retrato.webp" }],
+    width: 418,
+    height: 548,
+    alt: "Retrato en blanco y negro de Verónica Calabuch sonriendo, con las manos en el pelo",
+    focal: "50% 25%",
     brief: "Foto cercana y cálida: sonrisa, gesto de bienvenida.",
   },
   packPersonal: {
