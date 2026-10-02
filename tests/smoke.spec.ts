@@ -106,38 +106,61 @@ test.describe("Home", () => {
   });
 });
 
-test.describe("Online", () => {
+test.describe("Entrena conmigo", () => {
   test("filtros sincronizados con la URL", async ({ page }) => {
     const errors = collectErrors(page);
-    await page.goto("/online");
+    await page.goto("/entrena-conmigo");
     await expect(page.locator("h1")).toHaveCount(1);
     const status = page.locator("#entrenos-title").locator("xpath=../..").getByRole("status");
     await expect(status).toHaveText("6 entrenamientos");
     await page.getByRole("group", { name: "Nivel" }).getByRole("button", { name: "Avanzado" }).click();
     await expect(page).toHaveURL(/nivel=avanzado/);
     await expect(status).toHaveText("1 entrenamiento");
-    await page.goto("/online?tipo=movilidad");
+    await page.goto("/entrena-conmigo?tipo=movilidad");
     await expect(status).toHaveText("1 entrenamiento");
     expect(errors).toEqual([]);
   });
 
-  test("presenta el directo y no ofrece compras reales", async ({ page }) => {
-    await page.goto("/online");
+  test("presenta el directo, las grabaciones y el pack, sin compras reales", async ({ page }) => {
+    await page.goto("/entrena-conmigo");
     await expect(page.locator("h1")).toContainText("Entrena conmigo");
     await expect(page.getByText("No estás siguiendo un vídeo.", { exact: false })).toBeVisible();
+    for (const id of ["en-directo", "sesiones-grabadas", "pack-online", "aviso"]) {
+      await expect(page.locator(`#${id}`)).toHaveCount(1);
+      await expect(page.getByRole("navigation", { name: "En esta página" }).locator(`a[href="#${id}"]`)).toHaveCount(1);
+    }
+    await expect(page.locator("#pack-online").getByText("Próximamente").first()).toBeVisible();
     await expect(page.getByRole("link", { name: /comprar/i })).toHaveCount(0);
     await expect(page.getByRole("button", { name: /comprar/i })).toHaveCount(0);
   });
 
-  test("«Entrena conmigo» lleva a /online desde la navegación y la home", async ({ page }, info) => {
+  test("/online redirige a /entrena-conmigo conservando los filtros", async ({ page }) => {
+    await page.goto("/online?tipo=movilidad");
+    await expect(page).toHaveURL(/\/entrena-conmigo\?tipo=movilidad$/);
+    await expect(page.locator("#entrenos-title").locator("xpath=../..").getByRole("status")).toHaveText("1 entrenamiento");
+  });
+
+  test("«Online» sigue llevando a la sección de la home y «Entrena conmigo» a su página", async ({ page }, info) => {
     await page.goto("/");
+    const footer = page.getByRole("navigation", { name: "Secciones" });
+    await expect(footer.getByRole("link", { name: "Online" })).toHaveAttribute("href", "#online");
+    await expect(footer.getByRole("link", { name: "Entrena conmigo" })).toHaveAttribute("href", "/entrena-conmigo");
+
     if (isMobile(info.project.name)) {
       await page.getByRole("button", { name: "Abrir menú" }).click();
-      await page.getByRole("dialog", { name: "Menú" }).getByRole("link", { name: "Entrena conmigo" }).click();
+      const menu = page.getByRole("dialog", { name: "Menú" });
+      await expect(menu.getByRole("list").first().getByRole("link")).toHaveText(["Sobre mí", "Presencial", "Online", "Entrena conmigo", "Packs", "Cómo trabajo", "Preguntas"]);
+      await menu.getByRole("link", { name: "Entrena conmigo" }).click();
     } else {
-      await page.getByRole("navigation", { name: "Principal" }).getByRole("link", { name: "Entrena conmigo" }).click();
+      const nav = page.getByRole("navigation", { name: "Principal" });
+      await expect(nav.getByRole("link")).toHaveText(["Sobre mí", "Presencial", "Online", "Entrena conmigo", "Packs", "Cómo trabajo", "Preguntas"]);
+      await nav.getByRole("link", { name: "Online" }).click();
+      await expect(page).toHaveURL(/#online$/);
+      // Al bajar hasta la sección, la cabecera se oculta (comportamiento previsto): se vuelve arriba.
+      await page.goto("/");
+      await nav.getByRole("link", { name: "Entrena conmigo" }).click();
     }
-    await expect(page).toHaveURL(/\/online$/);
+    await expect(page).toHaveURL(/\/entrena-conmigo$/);
     await expect(page.locator("h1")).toContainText("Entrena conmigo");
     if (!isMobile(info.project.name)) {
       await expect(page.getByRole("navigation", { name: "Principal" }).getByRole("link", { name: "Entrena conmigo" })).toHaveAttribute("aria-current", "page");
@@ -145,8 +168,7 @@ test.describe("Online", () => {
 
     await page.goto("/#entrenamientos");
     await page.locator("#entrenamientos").getByRole("link", { name: "Entrena conmigo" }).click();
-    await expect(page).toHaveURL(/\/online$/);
-    await expect(page.getByRole("navigation", { name: "Secciones" }).getByRole("link", { name: "Entrena conmigo" })).toHaveAttribute("href", "/online");
+    await expect(page).toHaveURL(/\/entrena-conmigo$/);
   });
 });
 
@@ -246,16 +268,18 @@ test.describe("Hero con vídeo vertical", () => {
     });
   }
 
-  test("móvil: el hero de siempre, imagen a sangre y sin vídeo", async ({ browser }) => {
+  test("móvil: el hero de siempre, a sangre, con el vídeo después de la carga", async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     const page = await context.newPage();
-    const videos: string[] = [];
-    page.on("request", (r) => r.resourceType() === "media" && videos.push(r.url()));
+    let loaded = false;
+    const early: string[] = [];
+    page.on("load", () => (loaded = true));
+    page.on("request", (r) => r.resourceType() === "media" && !loaded && early.push(r.url()));
     await page.goto("/", { waitUntil: "networkidle" });
     const box = await page.locator("[data-hero-media]").boundingBox();
     expect(Math.round(box!.width)).toBe(390);
-    await expect(page.locator("[data-hero-media] video")).toHaveCount(0);
-    expect(videos).toEqual([]);
+    await expect(page.locator("[data-hero-media] img")).toBeVisible();
+    expect(early).toEqual([]);
     await context.close();
   });
 });
@@ -273,11 +297,24 @@ test("móvil: las imágenes respiran (margen lateral) sin cambiar en escritorio"
   expect((await edges(820)).left).toBe(0);
 });
 
+test("la cabecera de escritorio cabe entera (7 enlaces + botón) desde 1024 px", async ({ browser }) => {
+  for (const width of [1024, 1100, 1280]) {
+    const context = await browser.newContext({ viewport: { width, height: 800 } });
+    const page = await context.newPage();
+    await page.goto("/");
+    const cta = await page.locator("header").getByRole("link", { name: "Escríbeme" }).boundingBox();
+    expect(cta!.x + cta!.width, `botón a ${width}px`).toBeLessThanOrEqual(width);
+    const links = page.getByRole("navigation", { name: "Principal" }).getByRole("link");
+    for (const box of await links.evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) expect(box).toBeLessThan(50);
+    await context.close();
+  }
+});
+
 test("sin scroll horizontal en móvil, tablet y escritorio", async ({ browser }) => {
   for (const width of [375, 820, 1440]) {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
     const page = await context.newPage();
-    for (const path of ["/", "/online", "/packs/online-en-directo"]) {
+    for (const path of ["/", "/entrena-conmigo", "/packs/online-en-directo"]) {
       await page.goto(path);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(overflow, `${path} a ${width}px`).toBe(0);

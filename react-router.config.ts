@@ -11,7 +11,7 @@ export default {
   ssr: false,
   prerender: [
     "/",
-    "/online",
+    "/entrena-conmigo",
     ...packSlugs.map((slug) => `/packs/${slug}`),
     "/aviso-legal",
     "/privacidad",

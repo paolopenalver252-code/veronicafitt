@@ -35,10 +35,10 @@ export function MobileMenu({ onClose, active }: { onClose: () => void; active: s
       >
         <ul ref={listRef} className="flex flex-col">
           {navItems.map((item, i) => {
-            const isActive = active === item.anchor || (item.to !== undefined && pathname === item.to);
+            const isActive = item.to ? pathname === item.to : active === item.anchor;
             return (
               <m.li
-                key={item.anchor}
+                key={item.label}
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: easeOutSoft, delay: 0.05 + 0.04 * i }}

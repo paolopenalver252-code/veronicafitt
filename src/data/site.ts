@@ -31,8 +31,9 @@ export const site = {
 export const navItems: NavItem[] = [
   { label: "Sobre mí", anchor: "sobre-mi" },
   { label: "Presencial", anchor: "entrenamientos" },
-  // Entrenamiento a distancia (directo + grabaciones): lleva a su página.
-  { label: "Entrena conmigo", anchor: "online", to: "/online" },
+  { label: "Online", anchor: "online" },
+  // Espacio completo del entrenamiento a distancia (directo + sesiones grabadas): su propia página.
+  { label: "Entrena conmigo", to: "/entrena-conmigo" },
   { label: "Packs", anchor: "packs" },
   { label: "Cómo trabajo", anchor: "como-trabajo" },
   { label: "Preguntas", anchor: "preguntas" },

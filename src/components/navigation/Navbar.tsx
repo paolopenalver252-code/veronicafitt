@@ -12,7 +12,7 @@ import { MobileMenu } from "./MobileMenu";
 
 export function Navbar({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOpen: (open: boolean) => void }) {
   const { direction, scrolled } = useScrollDirection();
-  const active = useActiveSection(navItems.map((i) => i.anchor));
+  const active = useActiveSection(navItems.flatMap((i) => (i.anchor ? [i.anchor] : [])));
   const toggleRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
   const hidden = direction === "down" && scrolled && !menuOpen;
@@ -61,11 +61,12 @@ export function Navbar({ menuOpen, setMenuOpen }: { menuOpen: boolean; setMenuOp
           </Link>
 
           <nav aria-label="Principal" className="hidden lg:block">
-            <ul className="flex items-center gap-7">
+            {/* 7 enlaces: entre 1024 y 1279 px, separación algo menor para que quepa el botón. */}
+            <ul className="flex items-center gap-4 xl:gap-7">
               {navItems.map((item) => {
-                const isActive = active === item.anchor || (item.to !== undefined && location.pathname === item.to);
+                const isActive = item.to ? location.pathname === item.to : active === item.anchor;
                 return (
-                  <li key={item.anchor}>
+                  <li key={item.label}>
                     <AnchorLink
                       anchor={item.anchor}
                       to={item.to}

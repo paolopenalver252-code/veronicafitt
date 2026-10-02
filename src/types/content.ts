@@ -27,7 +27,7 @@ export type MediaSlot = {
 /**
  * Vídeo del hero: vertical 9:16 (un Reel de Instagram). En tablet y escritorio
  * se muestra en un marco de su misma proporción: nunca se recorta ni se deforma.
- * En móvil no hay vídeo: solo imagen.
+ * En móvil se reproduce en el bloque a sangre del hero, con su propio encuadre.
  */
 export type HeroVideo = {
   /** Vídeo vertical 9:16, sin sonido (se reproduce silenciado). */
@@ -36,9 +36,9 @@ export type HeroVideo = {
   poster: Maybe<string>;
   /** object-position por si el archivo no es exactamente 9:16. */
   focal?: string;
-  /** Móvil (sin vídeo): foto de la misma escena; si falta, se usa el fotograma. */
+  /** Móvil: imagen de carga alternativa; si falta, se usa el fotograma. */
   posterMobile?: Maybe<string>;
-  /** object-position de la imagen en móvil, donde se recorta en horizontal. */
+  /** object-position en móvil (imagen y vídeo), donde el bloque es casi cuadrado. */
   focalMobile?: string;
   alt: string;
   brief: string;
@@ -158,10 +158,7 @@ export type Pack = {
   notes?: Maybe<string>[];
 };
 
-export type NavItem = {
-  label: string;
-  /** Sección de la home asociada (también marca el enlace activo al hacer scroll). */
-  anchor: string;
-  /** Si existe, el enlace lleva a esta página en lugar de a la sección de la home. */
-  to?: string;
-};
+/** Elemento de navegación: una sección de la home (`anchor`) o una página propia (`to`). */
+export type NavItem =
+  | { label: string; anchor: string; to?: never }
+  | { label: string; to: string; anchor?: never };

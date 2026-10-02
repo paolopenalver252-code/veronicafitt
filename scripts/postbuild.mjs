@@ -10,7 +10,7 @@ if (existsSync(`${out}/404/index.html`)) {
 }
 
 if (url) {
-  const routes = ["/", "/online"];
+  const routes = ["/", "/entrena-conmigo"];
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     routes.map((r) => `  <url><loc>${url}${r}</loc></url>`).join("\n") +

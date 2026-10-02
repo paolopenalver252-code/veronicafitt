@@ -14,8 +14,9 @@ export const heroVideo: HeroVideo = {
   // Primer fotograma del vídeo: el paso de la imagen al vídeo no se nota.
   poster: "/assets/veronica/hero/veronica-hero.jpg",
   focal: "50% 50%",
-  // Móvil: el mismo fotograma, encuadrado en Verónica (abajo, con el TRX).
-  focalMobile: "50% 84%",
+  // Móvil: el bloque es casi cuadrado y se ve ~58 % de la altura del vídeo.
+  // A media altura se le ve la cara en todos los ejercicios (comprobado fotograma a fotograma).
+  focalMobile: "50% 55%",
   alt: "Verónica Calabuch entrenando en su sala",
   brief: "Reel vertical de Verónica entrenando: ella completa en el plano, sin textos ni stickers.",
 };

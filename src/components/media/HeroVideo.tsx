@@ -6,7 +6,7 @@ import { MediaPlaceholder } from "./MediaPlaceholder";
 import { useAutoplayAllowed } from "./useAutoplayAllowed";
 import { useVideoControl, VideoToggle } from "./VideoToggle";
 
-/** Desde tablet (768 px) hay vídeo; en móvil, solo imagen. */
+/** Desde tablet (768 px) el póster horizontal; en móvil, la imagen móvil si existe. */
 const WIDE = "(min-width: 48rem)";
 
 const fit =
@@ -14,7 +14,7 @@ const fit =
 
 /**
  * Vídeo vertical del hero. En tablet y escritorio rellena su marco (9:16, la
- * proporción del Reel). En móvil nunca se descarga: se ve solo la imagen.
+ * proporción del Reel); en móvil, el bloque a sangre del hero (con su encuadre).
  * - El póster es el elemento LCP y se ve al instante.
  * - El vídeo empieza a descargarse solo después del evento `load`, en un
  *   momento ocioso, y sustituye al póster con un fundido cuando ya se reproduce.
@@ -27,26 +27,16 @@ export function HeroVideo({ hero }: { hero: HeroVideoData }) {
   const control = useVideoControl(ref);
   const { autoPlay } = control;
   const [load, setLoad] = useState(false);
-  const [wide, setWide] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [failed, setFailed] = useState(false);
 
   const src = resolved(hero.video);
   const poster = resolved(hero.poster);
-  const showVideo = Boolean(load && wide && src && !failed);
+  const showVideo = Boolean(load && src && !failed);
   const posterMobile = (hero.posterMobile ? resolved(hero.posterMobile) : null) ?? poster;
 
-  // Solo desde tablet: en móvil el vídeo nunca se monta ni se descarga.
   useEffect(() => {
-    const query = window.matchMedia(WIDE);
-    const update = () => setWide(query.matches);
-    update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
-  }, []);
-
-  useEffect(() => {
-    if (!allowed || !src || !wide) return;
+    if (!allowed || !src) return;
     let idleId = 0;
     const start = () => {
       idleId = window.requestIdleCallback
@@ -60,7 +50,7 @@ export function HeroVideo({ hero }: { hero: HeroVideoData }) {
       if (window.cancelIdleCallback) window.cancelIdleCallback(idleId);
       else window.clearTimeout(idleId);
     };
-  }, [allowed, src, wide]);
+  }, [allowed, src]);
 
   // Fuera de pantalla, el vídeo se pausa.
   useEffect(() => {

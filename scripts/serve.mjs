@@ -1,5 +1,5 @@
 // Servidor estático mínimo para revisar el build tal y como se desplegará (sin dependencias).
-import { createReadStream, existsSync, statSync } from "node:fs";
+import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize, resolve } from "node:path";
 
@@ -12,8 +12,17 @@ const types = {
   ".mp4": "video/mp4", ".webm": "video/webm", ".txt": "text/plain", ".xml": "application/xml", ".json": "application/json",
 };
 
+// Las mismas redirecciones que Vercel (solo rutas exactas, conservando la query).
+const redirects = JSON.parse(readFileSync("vercel.json", "utf8")).redirects ?? [];
+
 createServer((req, res) => {
-  const path = normalize(decodeURIComponent(new URL(req.url, "http://x").pathname));
+  const url = new URL(req.url, "http://x");
+  const redirect = redirects.find((r) => r.source === url.pathname);
+  if (redirect) {
+    res.writeHead(redirect.permanent ? 308 : 307, { location: redirect.destination + url.search });
+    return res.end();
+  }
+  const path = normalize(decodeURIComponent(url.pathname));
   const candidates = [join(root, path), join(root, path, "index.html"), join(root, `${path}.html`)];
   // Nunca servir nada fuera de build/client
   const file = candidates.find((f) => resolve(f).startsWith(absRoot) && existsSync(f) && statSync(f).isFile());

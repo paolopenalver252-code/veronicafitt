@@ -46,7 +46,7 @@ export function Footer() {
           <nav aria-label="Secciones" className="md:col-span-4 md:col-start-9">
             <ul className="grid grid-cols-2 gap-x-6">
               {navItems.map((item) => (
-                <li key={item.anchor}>
+                <li key={item.label}>
                   <AnchorLink anchor={item.anchor} to={item.to} className={linkClass}>
                     {item.label}
                   </AnchorLink>

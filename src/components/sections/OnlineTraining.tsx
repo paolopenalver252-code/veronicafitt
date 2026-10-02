@@ -59,7 +59,7 @@ export function OnlineTraining() {
               <ContactCta service="online" className="w-full sm:w-auto">
                 {liveTraining.cta}
               </ContactCta>
-              <Link to="/online" className={cn(textLinkClasses(), "mt-2")}>
+              <Link to="/entrena-conmigo" className={cn(textLinkClasses(), "mt-2")}>
                 Todo sobre el entrenamiento online
               </Link>
             </div>

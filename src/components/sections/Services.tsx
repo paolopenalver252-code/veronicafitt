@@ -1,3 +1,5 @@
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router";
 import { ContactCta } from "~/components/contact/ContactIntent";
 import { Media } from "~/components/media/Media";
 import type { PlaceholderTone } from "~/components/media/MediaPlaceholder";
@@ -45,9 +47,13 @@ export function Services() {
               </div>
               <p className="mt-3 max-w-[34rem] text-pretty text-piedra">{online.summary}</p>
             </div>
-            <a href={online.cta.href} className={textLinkClasses("min-h-11 shrink-0")}>
+            <Link to={online.cta.href} className={textLinkClasses("group min-h-11 shrink-0")}>
               {online.cta.label}
-            </a>
+              <ArrowRight
+                aria-hidden
+                className="size-4 transition-transform duration-300 ease-(--ease-out-soft) group-hover:translate-x-0.5"
+              />
+            </Link>
           </FadeIn>
         </div>
       )}
