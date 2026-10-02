@@ -107,10 +107,14 @@ export const media = {
   studio: {
     id: "studio",
     kind: "image",
-    src: pending("Plano general limpio de la sala (≈ 45 m²)"),
-    width: 1800,
-    height: 1200,
-    alt: "Vista general de la sala de entrenamiento",
+    // Vista general generada con IA (Gemini) a partir de las fotos reales de la sala. Sustituir por una foto real cuando la haya.
+    src: "/assets/veronica/studio/sala-general.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/studio/sala-general.webp" }],
+    width: 1376,
+    height: 768,
+    alt: "Vista general de la sala de entrenamiento, con la barra de dominaciones, la estantería de material y el fitball",
+    // Móvil (4:5): barra, fitball y estantería. Escritorio (21:9): se recorta sobre todo el techo.
+    focal: "40% 65%",
     brief: "Plano general de la sala, sin textos ni stickers de Instagram.",
   },
   studioDetailA: {
@@ -147,19 +151,28 @@ export const media = {
   packPersonal: {
     id: "pack-personal",
     kind: "image",
-    src: pending("Foto para el pack de entrenamiento personal (4:5)"),
-    width: 1200,
-    height: 1500,
-    alt: "Verónica durante una sesión de entrenamiento personal",
+    // Se usa en la tarjeta del pack (5:4 en móvil, 3:4 desde tablet) y en su ficha (4:5).
+    src: "/assets/veronica/packs/entrenamiento-personal.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/packs/entrenamiento-personal.webp" }],
+    width: 1080,
+    height: 1786,
+    alt: "Sesión de entrenamiento personal en la sala: explicación de un ejercicio con mancuerna",
+    // Prioriza las caras: en la tarjeta móvil (5:4) se recortan las piernas; en la ficha y desde tablet se ven casi enteras.
+    focal: "50% 48%",
     brief: "Verónica con una persona en sesión individual, en la sala.",
   },
   packGrupos: {
     id: "pack-grupos",
     kind: "image",
-    src: pending("Foto para el pack de grupos reducidos (4:5)"),
-    width: 1200,
-    height: 1500,
-    alt: "Entrenamiento en grupo reducido con Verónica",
+    // Provisional: captura de Instagram de 406×392 px (sin los puntos del carrusel). Sustituir por el original con el mismo nombre.
+    // Se usa en la tarjeta del pack (5:4 en móvil, 3:4 desde tablet) y en su ficha (4:5).
+    src: "/assets/veronica/packs/grupos-reducidos.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/packs/grupos-reducidos.webp" }],
+    width: 406,
+    height: 392,
+    alt: "Entrenamiento en grupo reducido al aire libre: varias personas haciendo plancha sobre el césped",
+    // Encuadre en la franja del grupo (la instructora de pie y las planchas); se recorta cielo y césped.
+    focal: "45% 48%",
     brief: "Grupo reducido entrenando con Verónica. Con consentimiento de imagen.",
   },
   packOnline: {
