@@ -178,10 +178,15 @@ export const media = {
   packOnline: {
     id: "pack-online",
     kind: "image",
-    src: pending("Foto para el pack online (4:5): Verónica frente a cámara"),
-    width: 1200,
-    height: 1500,
-    alt: "Verónica entrenando frente a la cámara en una sesión online",
+    // Recortada: sin el techo vacío ni el icono de Instagram de la esquina.
+    // Se usa en la tarjeta del pack (5:4 en móvil, 3:4 desde tablet) y en su ficha (4:5).
+    src: "/assets/veronica/packs/online-en-directo.jpg",
+    sources: [{ type: "image/webp", srcSet: "/assets/veronica/packs/online-en-directo.webp" }],
+    width: 1038,
+    height: 1408,
+    alt: "Verónica Calabuch entrenando con barra de discos en su sala",
+    // Prioriza la cara y el ejercicio: en la tarjeta móvil (5:4) se recortan las piernas.
+    focal: "50% 10%",
     brief: "Verónica entrenando frente a la cámara, como en una sesión en directo.",
   },
 } satisfies Record<string, MediaSlot>;
